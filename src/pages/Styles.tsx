@@ -3,6 +3,9 @@ import image1950s from "@/assets/1950s-style.jpg";
 import imageBrunch from "@/assets/brunch-dressing.jpg";
 import imageSummer from "@/assets/summer-cocktail.jpg";
 import imageRetro from "@/assets/retro-disco.jpg";
+import imageEuropean from "@/assets/european-cafe.jpg";
+import imageTokyo from "@/assets/tokyo-street.jpg";
+import imageWinter from "@/assets/winter-chalet.jpg";
 
 const Styles = () => {
   const styles = [
@@ -10,6 +13,9 @@ const Styles = () => {
     { title: "brunch dressing", image: imageBrunch },
     { title: "Summer Cocktail", image: imageSummer },
     { title: "Retro Disco Dinner", image: imageRetro },
+    { title: "European Café Look", image: imageEuropean },
+    { title: "Tokyo Street Pop", image: imageTokyo },
+    { title: "Winter Chalet Elegance", image: imageWinter },
   ];
 
   return (
@@ -41,7 +47,6 @@ const Styles = () => {
               key={index}
               title={style.title}
               image={style.image}
-              className={index === 2 ? "row-span-2" : ""}
             />
           ))}
         </div>
