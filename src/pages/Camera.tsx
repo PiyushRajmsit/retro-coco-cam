@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogClose } from "@/components/ui/dialog";
-import { Plus, Image, Link, ThumbsUp, ThumbsDown, Upload } from "lucide-react";
+import { Plus, Image, Link, ThumbsUp, ThumbsDown, Upload, Send, Edit } from "lucide-react";
 
 const Camera = () => {
   const [showOptions, setShowOptions] = useState(false);
@@ -14,17 +14,19 @@ const Camera = () => {
 
   // Mock result images
   const resultImages = [
-    "/placeholder.svg?height=400&width=400",
-    "/placeholder.svg?height=400&width=400", 
-    "/placeholder.svg?height=400&width=400",
-    "/placeholder.svg?height=400&width=400"
+    "https://images.unsplash.com/photo-1649972904349-6e44c42644a7?height=400&width=400&fit=crop",
+    "https://images.unsplash.com/photo-1518770660439-4636190af475?height=400&width=400&fit=crop", 
+    "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?height=400&width=400&fit=crop",
+    "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?height=400&width=400&fit=crop"
   ];
 
   const followUpPrompts = [
-    "Change the background to sunset",
-    "Add vintage filter effect", 
-    "Enhance the colors",
-    "Apply soft lighting"
+    "urban graffiti wall",
+    "soft natural light", 
+    "casual cafe setting",
+    "wooden table texture",
+    "park with greenery",
+    "vintage filter effect"
   ];
 
   const handleQuery = () => {
@@ -231,14 +233,14 @@ const Camera = () => {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Upload an Image and Select one of categories below"
-              className="pl-12 pr-16 bg-background border-border"
+              className="pl-12 pr-12 bg-background border-border text-sm placeholder:text-xs"
               onKeyPress={(e) => e.key === 'Enter' && handleQuery()}
             />
             <button
               onClick={handleQuery}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 px-3 py-1 bg-primary text-primary-foreground rounded-md text-sm hover:bg-primary/90 transition-colors"
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 p-2 hover:bg-accent rounded-md transition-colors"
             >
-              Send
+              <Send className="w-4 h-4 text-primary" />
             </button>
           </div>
 
@@ -286,9 +288,9 @@ const Camera = () => {
               </button>
               <button 
                 onClick={handleEditImage}
-                className="px-4 py-2 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors"
+                className="p-3 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
               >
-                Edit Image
+                <Edit className="w-6 h-6" />
               </button>
             </div>
 
