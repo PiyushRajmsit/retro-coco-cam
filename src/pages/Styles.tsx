@@ -6,6 +6,7 @@ import imageRetro from "@/assets/retro-disco.jpg";
 import imageEuropean from "@/assets/european-cafe.jpg";
 import imageTokyo from "@/assets/tokyo-street.jpg";
 import imageWinter from "@/assets/winter-chalet.jpg";
+import imageSunset from "@/assets/sunset-beach.jpg";
 
 const Styles = () => {
   const styles = [
@@ -16,6 +17,7 @@ const Styles = () => {
     { title: "European Café Look", image: imageEuropean },
     { title: "Tokyo Street Pop", image: imageTokyo },
     { title: "Winter Chalet Elegance", image: imageWinter },
+    { title: "Sunset Beach Sundown", image: imageSunset },
   ];
 
   return (
