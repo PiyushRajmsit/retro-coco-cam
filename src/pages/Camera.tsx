@@ -110,28 +110,62 @@ const Camera = () => {
         {!showResults ? (
           <>
             <div className="text-center mb-8">
-              <h2 className="text-4xl font-bold mb-2 bg-gradient-primary bg-clip-text text-transparent">
-                Hello, Piyush
+              <h2 className="text-3xl font-bold mb-4 text-foreground">
+                Photo Filter Editing
               </h2>
-              <p className="text-muted-foreground text-lg">
-                What would you like to transform today?
+              <p className="text-muted-foreground text-base mb-6">
+                Upload your image and apply stunning filters
               </p>
             </div>
 
-            {/* Quick Action Suggestions */}
-            <div className="grid grid-cols-2 gap-3 w-full max-w-md mb-8">
-              {quickActions.map((action, index) => (
-                <button
-                  key={index}
-                  onClick={() => {
-                    setQuery(action);
-                    handleQuery();
-                  }}
-                  className="p-4 rounded-xl bg-card border border-border text-left hover:bg-accent transition-colors"
-                >
-                  <span className="text-sm text-foreground">{action}</span>
+            {/* Image Upload Options */}
+            <div className="w-full max-w-md mb-6">
+              <h3 className="text-lg font-semibold text-foreground mb-4 text-center">Upload Your Image</h3>
+              <div className="grid grid-cols-2 gap-3 mb-6">
+                <button className="flex flex-col items-center gap-3 p-4 rounded-xl bg-card border border-border hover:bg-accent transition-colors">
+                  <Upload className="w-8 h-8 text-primary" />
+                  <span className="text-sm text-foreground font-medium">Upload from Device</span>
                 </button>
-              ))}
+                <button className="flex flex-col items-center gap-3 p-4 rounded-xl bg-card border border-border hover:bg-accent transition-colors">
+                  <Link className="w-8 h-8 text-primary" />
+                  <span className="text-sm text-foreground font-medium">Paste Image URL</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Filter Categories */}
+            <div className="w-full max-w-md mb-6">
+              <h3 className="text-lg font-semibold text-foreground mb-4 text-center">Filter Categories</h3>
+              <div className="grid grid-cols-2 gap-3">
+                {quickActions.map((action, index) => (
+                  <button
+                    key={index}
+                    onClick={() => {
+                      setQuery(action);
+                      handleQuery();
+                    }}
+                    className="p-4 rounded-xl bg-card border border-border text-left hover:bg-accent transition-colors"
+                  >
+                    <span className="text-sm text-foreground font-medium">{action}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Image Type Suggestions */}
+            <div className="w-full max-w-md">
+              <h3 className="text-lg font-semibold text-foreground mb-4 text-center">Best Results With</h3>
+              <div className="grid grid-cols-3 gap-2">
+                <div className="text-center p-3 rounded-lg bg-primary/10 border border-primary/20">
+                  <span className="text-xs text-primary font-medium">Portraits</span>
+                </div>
+                <div className="text-center p-3 rounded-lg bg-primary/10 border border-primary/20">
+                  <span className="text-xs text-primary font-medium">Landscapes</span>
+                </div>
+                <div className="text-center p-3 rounded-lg bg-primary/10 border border-primary/20">
+                  <span className="text-xs text-primary font-medium">Objects</span>
+                </div>
+              </div>
             </div>
           </>
         ) : (
