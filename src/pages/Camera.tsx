@@ -1,10 +1,60 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Plus, Image, Link } from "lucide-react";
+import { Dialog, DialogContent, DialogClose } from "@/components/ui/dialog";
+import { Plus, Image, Link, ThumbsUp, ThumbsDown, Upload } from "lucide-react";
 
 const Camera = () => {
   const [showOptions, setShowOptions] = useState(false);
+  const [showResults, setShowResults] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<number | null>(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [editingImage, setEditingImage] = useState<string | null>(null);
+  const [query, setQuery] = useState("");
+
+  // Mock result images
+  const resultImages = [
+    "/placeholder.svg?height=400&width=400",
+    "/placeholder.svg?height=400&width=400", 
+    "/placeholder.svg?height=400&width=400",
+    "/placeholder.svg?height=400&width=400"
+  ];
+
+  const followUpPrompts = [
+    "Change the background to sunset",
+    "Add vintage filter effect", 
+    "Enhance the colors",
+    "Apply soft lighting"
+  ];
+
+  const handleQuery = () => {
+    if (query.trim()) {
+      setShowResults(true);
+    }
+  };
+
+  const openImageView = (index: number) => {
+    setSelectedImage(index);
+    setCurrentImageIndex(index);
+  };
+
+  const closeImageView = () => {
+    setSelectedImage(null);
+    setEditingImage(null);
+  };
+
+  const handleEditImage = () => {
+    setEditingImage(resultImages[currentImageIndex]);
+    setSelectedImage(null);
+  };
+
+  const nextImage = () => {
+    setCurrentImageIndex((prev) => (prev + 1) % resultImages.length);
+  };
+
+  const prevImage = () => {
+    setCurrentImageIndex((prev) => (prev - 1 + resultImages.length) % resultImages.length);
+  };
 
   const suggestions = [
     "Photo-Filters",
@@ -51,36 +101,117 @@ const Camera = () => {
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col items-center justify-center px-4 pb-32">
-        <div className="text-center mb-8">
-          <h2 className="text-4xl font-bold mb-2 bg-gradient-primary bg-clip-text text-transparent">
-            Hello, Piyush
-          </h2>
-          <p className="text-muted-foreground text-lg">
-            What would you like to transform today?
-          </p>
-        </div>
+        {!showResults ? (
+          <>
+            <div className="text-center mb-8">
+              <h2 className="text-4xl font-bold mb-2 bg-gradient-primary bg-clip-text text-transparent">
+                Hello, Piyush
+              </h2>
+              <p className="text-muted-foreground text-lg">
+                What would you like to transform today?
+              </p>
+            </div>
 
-        {/* Quick Action Suggestions */}
-        <div className="grid grid-cols-2 gap-3 w-full max-w-md mb-8">
-          {quickActions.map((action, index) => (
-            <button
-              key={index}
-              className="p-4 rounded-xl bg-card border border-border text-left hover:bg-accent transition-colors"
+            {/* Quick Action Suggestions */}
+            <div className="grid grid-cols-2 gap-3 w-full max-w-md mb-8">
+              {quickActions.map((action, index) => (
+                <button
+                  key={index}
+                  onClick={() => {
+                    setQuery(action);
+                    handleQuery();
+                  }}
+                  className="p-4 rounded-xl bg-card border border-border text-left hover:bg-accent transition-colors"
+                >
+                  <span className="text-sm text-foreground">{action}</span>
+                </button>
+              ))}
+            </div>
+          </>
+        ) : (
+          <>
+            {/* Results Header */}
+            <div className="text-center mb-6">
+              <h2 className="text-2xl font-bold text-foreground mb-2">Your Results</h2>
+              <p className="text-muted-foreground">Generated images for: "{query}"</p>
+            </div>
+
+            {/* Results Grid */}
+            <div className="grid grid-cols-2 gap-4 w-full max-w-md mb-8">
+              {resultImages.map((image, index) => (
+                <button
+                  key={index}
+                  onClick={() => openImageView(index)}
+                  className="aspect-square rounded-xl overflow-hidden bg-card border border-border hover:border-primary/50 transition-colors"
+                >
+                  <img 
+                    src={image} 
+                    alt={`Result ${index + 1}`}
+                    className="w-full h-full object-cover"
+                  />
+                </button>
+              ))}
+            </div>
+
+            {/* Back to Chat Button */}
+            <Button 
+              onClick={() => setShowResults(false)}
+              variant="outline"
+              className="mb-4"
             >
-              <span className="text-sm text-foreground">{action}</span>
-            </button>
-          ))}
-        </div>
+              Generate New Images
+            </Button>
+          </>
+        )}
       </div>
 
       {/* Chat Input Area */}
       <div className="fixed bottom-20 left-0 right-0 px-4">
         <div className="bg-card rounded-2xl border border-border p-4">
+          {/* Editing Image Preview */}
+          {editingImage && (
+            <div className="mb-4 p-3 bg-primary/10 rounded-lg border border-primary/20">
+              <div className="flex items-center gap-3">
+                <img 
+                  src={editingImage} 
+                  alt="Editing" 
+                  className="w-12 h-12 rounded-lg object-cover"
+                />
+                <div className="flex-1">
+                  <p className="text-sm text-foreground font-medium">Editing image</p>
+                  <p className="text-xs text-muted-foreground">Make changes to this image</p>
+                </div>
+                <button 
+                  onClick={() => setEditingImage(null)}
+                  className="text-muted-foreground hover:text-foreground"
+                >
+                  ×
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Follow-up Prompts for Editing */}
+          {editingImage && (
+            <div className="flex gap-2 mb-4 overflow-x-auto scrollbar-hide">
+              {followUpPrompts.map((prompt, index) => (
+                <button
+                  key={index}
+                  onClick={() => setQuery(prompt)}
+                  className="flex-shrink-0 px-3 py-1 bg-accent text-accent-foreground rounded-full text-xs font-medium hover:bg-accent/80 transition-colors"
+                >
+                  {prompt}
+                </button>
+              ))}
+            </div>
+          )}
+
           {/* Suggestion Chips */}
           <div className="flex gap-2 mb-4 overflow-x-auto scrollbar-hide">
             {suggestions.map((suggestion, index) => (
               <button
                 key={index}
+                onClick={() => setQuery(suggestion)}
                 className="flex-shrink-0 px-4 py-2 bg-primary/20 text-primary rounded-full text-sm font-medium hover:bg-primary/30 transition-colors"
               >
                 {suggestion}
@@ -90,15 +221,24 @@ const Camera = () => {
 
           {/* Input with Actions */}
           <div className="relative">
-            <Input
-              placeholder="Ask Coco AI"
-              className="pr-12 bg-background border-border"
-            />
             <button
               onClick={() => setShowOptions(!showOptions)}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 p-1 hover:bg-accent rounded-md"
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 p-1 hover:bg-accent rounded-md"
             >
               <Plus className="w-5 h-5 text-muted-foreground" />
+            </button>
+            <Input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Upload an Image and Select one of categories below"
+              className="pl-12 pr-16 bg-background border-border"
+              onKeyPress={(e) => e.key === 'Enter' && handleQuery()}
+            />
+            <button
+              onClick={handleQuery}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 px-3 py-1 bg-primary text-primary-foreground rounded-md text-sm hover:bg-primary/90 transition-colors"
+            >
+              Send
             </button>
           </div>
 
@@ -106,7 +246,7 @@ const Camera = () => {
           {showOptions && (
             <div className="mt-3 space-y-2">
               <button className="flex items-center gap-3 w-full p-3 rounded-lg bg-background hover:bg-accent transition-colors">
-                <Image className="w-5 h-5 text-primary" />
+                <Upload className="w-5 h-5 text-primary" />
                 <span className="text-foreground">Attach an Image</span>
               </button>
               <button className="flex items-center gap-3 w-full p-3 rounded-lg bg-background hover:bg-accent transition-colors">
@@ -117,6 +257,70 @@ const Camera = () => {
           )}
         </div>
       </div>
+
+      {/* Full Screen Image View Dialog */}
+      <Dialog open={selectedImage !== null} onOpenChange={closeImageView}>
+        <DialogContent className="p-0 max-w-full h-full bg-background border-0">
+          <div className="relative h-full w-full flex flex-col">
+            {/* Close button */}
+            <DialogClose className="absolute top-4 right-4 z-10 p-2 bg-background/80 backdrop-blur-sm rounded-full">
+              ×
+            </DialogClose>
+
+            {/* Image container */}
+            <div className="flex-1 flex items-center justify-center p-4">
+              <img 
+                src={resultImages[currentImageIndex]} 
+                alt={`Result ${currentImageIndex + 1}`}
+                className="max-h-full max-w-full object-contain"
+              />
+            </div>
+
+            {/* Action buttons */}
+            <div className="flex items-center justify-center gap-4 p-6 bg-background/80 backdrop-blur-sm">
+              <button className="p-3 rounded-full bg-card hover:bg-accent transition-colors">
+                <ThumbsUp className="w-6 h-6 text-foreground" />
+              </button>
+              <button className="p-3 rounded-full bg-card hover:bg-accent transition-colors">
+                <ThumbsDown className="w-6 h-6 text-foreground" />
+              </button>
+              <button 
+                onClick={handleEditImage}
+                className="px-4 py-2 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors"
+              >
+                Edit Image
+              </button>
+            </div>
+
+            {/* Image navigation dots */}
+            <div className="flex items-center justify-center gap-2 pb-4">
+              {resultImages.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentImageIndex(index)}
+                  className={`w-2 h-2 rounded-full transition-colors ${
+                    index === currentImageIndex ? 'bg-primary' : 'bg-muted'
+                  }`}
+                />
+              ))}
+            </div>
+
+            {/* Swipe navigation */}
+            <button 
+              onClick={prevImage}
+              className="absolute left-4 top-1/2 transform -translate-y-1/2 p-2 bg-background/80 backdrop-blur-sm rounded-full"
+            >
+              ←
+            </button>
+            <button 
+              onClick={nextImage}
+              className="absolute right-4 top-1/2 transform -translate-y-1/2 p-2 bg-background/80 backdrop-blur-sm rounded-full"
+            >
+              →
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* Bottom Navigation */}
       <div className="fixed bottom-0 left-0 right-0 bg-card/80 backdrop-blur-md border-t border-border">
