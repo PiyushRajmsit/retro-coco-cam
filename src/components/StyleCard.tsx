@@ -16,11 +16,11 @@ export const StyleCard = ({ title, image, className = "" }: StyleCardProps) => {
           alt={title}
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
         
-        {/* Title positioned at bottom to avoid faces */}
-        <div className="absolute bottom-16 left-4 right-4">
-          <h3 className="text-white font-semibold text-lg capitalize drop-shadow-lg">
+        {/* Title with dedicated background strip */}
+        <div className="absolute bottom-14 left-0 right-0 bg-black/70 backdrop-blur-sm py-2 px-4">
+          <h3 className="text-white font-semibold text-sm capitalize text-center">
             {title}
           </h3>
         </div>
