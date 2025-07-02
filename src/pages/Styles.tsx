@@ -37,7 +37,15 @@ const Styles = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
           </button>
-          <div className="w-8 h-8 bg-gradient-primary rounded-full"></div>
+          <button 
+            onClick={() => window.location.href = '/profile'}
+            className="w-8 h-8 bg-gradient-primary rounded-full flex items-center justify-center"
+          >
+            <svg className="w-4 h-4 text-primary-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+          </button>
         </div>
       </div>
 
@@ -57,18 +65,24 @@ const Styles = () => {
       {/* Bottom Navigation */}
       <div className="fixed bottom-0 left-0 right-0 bg-card/80 backdrop-blur-md border-t border-border">
         <div className="flex items-center justify-around py-3">
-          <button className="p-3 text-foreground">
+          <button className="p-3 text-primary bg-primary/20 rounded-full">
             <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
               <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
             </svg>
           </button>
-          <button className="p-3 text-muted-foreground">
+          <button 
+            onClick={() => window.location.href = '/search'}
+            className="p-3 text-muted-foreground"
+          >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <circle cx="11" cy="11" r="8"/>
               <path d="m21 21-4.35-4.35"/>
             </svg>
           </button>
-          <button className="p-3 text-primary bg-primary/20 rounded-full">
+          <button 
+            onClick={() => window.location.href = '/camera'}
+            className="p-3 text-muted-foreground"
+          >
             <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
               <path d="M12 2L2 7v10c0 5.55 3.84 9.74 9 11 5.16-1.26 9-5.45 9-11V7l-10-5z"/>
             </svg>
