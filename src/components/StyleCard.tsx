@@ -16,15 +16,13 @@ export const StyleCard = ({ title, image, className = "" }: StyleCardProps) => {
           alt={title}
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
         
-        {/* Title with better visibility */}
-        <div className="absolute top-4 left-4">
-          <div className="bg-black/40 backdrop-blur-sm rounded-lg px-3 py-2">
-            <h3 className="text-white font-semibold text-sm capitalize drop-shadow-lg">
-              {title}
-            </h3>
-          </div>
+        {/* Title positioned at bottom to avoid faces */}
+        <div className="absolute bottom-16 left-4 right-4">
+          <h3 className="text-white font-semibold text-lg capitalize drop-shadow-lg">
+            {title}
+          </h3>
         </div>
         
         {/* Try it on button */}
