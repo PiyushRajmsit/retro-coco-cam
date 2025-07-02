@@ -174,6 +174,24 @@ const Camera = () => {
       {/* Chat Input Area */}
       <div className="fixed bottom-20 left-0 right-0 px-4">
         <div className="bg-card rounded-2xl border border-border p-4">
+          {/* Follow-up Prompts for Editing */}
+          {editingImage && (
+            <div className="mb-4">
+              <p className="text-sm font-medium text-foreground mb-3">Suggested</p>
+              <div className="flex gap-2 mb-4 overflow-x-auto scrollbar-hide">
+                {followUpPrompts.map((prompt, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setQuery(prompt)}
+                    className="flex-shrink-0 px-3 py-2 bg-primary/20 text-primary rounded-lg text-sm font-medium hover:bg-primary/30 transition-colors"
+                  >
+                    {prompt}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Editing Image Preview */}
           {editingImage && (
             <div className="mb-4 p-3 bg-primary/10 rounded-lg border border-primary/20">
@@ -194,21 +212,6 @@ const Camera = () => {
                   ×
                 </button>
               </div>
-            </div>
-          )}
-
-          {/* Follow-up Prompts for Editing */}
-          {editingImage && (
-            <div className="flex gap-2 mb-4 overflow-x-auto scrollbar-hide">
-              {followUpPrompts.map((prompt, index) => (
-                <button
-                  key={index}
-                  onClick={() => setQuery(prompt)}
-                  className="flex-shrink-0 px-3 py-1 bg-accent text-accent-foreground rounded-full text-xs font-medium hover:bg-accent/80 transition-colors"
-                >
-                  {prompt}
-                </button>
-              ))}
             </div>
           )}
 
