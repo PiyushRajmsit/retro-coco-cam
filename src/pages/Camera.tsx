@@ -48,6 +48,10 @@ const Camera = () => {
   const handleEditImage = () => {
     setEditingImage(resultImages[currentImageIndex]);
     setSelectedImage(null);
+    // Scroll down to show follow-up suggestions above chat input
+    setTimeout(() => {
+      window.scrollTo({ top: document.body.scrollHeight - window.innerHeight + 100, behavior: 'smooth' });
+    }, 100);
   };
 
   const nextImage = () => {
@@ -208,19 +212,6 @@ const Camera = () => {
             </div>
           )}
 
-          {/* Suggestion Chips */}
-          <div className="flex gap-2 mb-4 overflow-x-auto scrollbar-hide">
-            {suggestions.map((suggestion, index) => (
-              <button
-                key={index}
-                onClick={() => setQuery(suggestion)}
-                className="flex-shrink-0 px-4 py-2 bg-primary/20 text-primary rounded-full text-sm font-medium hover:bg-primary/30 transition-colors"
-              >
-                {suggestion}
-              </button>
-            ))}
-          </div>
-
           {/* Input with Actions */}
           <div className="relative">
             <button
@@ -242,6 +233,19 @@ const Camera = () => {
             >
               <Send className="w-4 h-4 text-primary" />
             </button>
+          </div>
+
+          {/* Suggestion Chips Below Input */}
+          <div className="flex gap-2 mt-4 overflow-x-auto scrollbar-hide">
+            {suggestions.map((suggestion, index) => (
+              <button
+                key={index}
+                onClick={() => setQuery(suggestion)}
+                className="flex-shrink-0 px-4 py-2 bg-primary/20 text-primary rounded-full text-sm font-medium hover:bg-primary/30 transition-colors"
+              >
+                {suggestion}
+              </button>
+            ))}
           </div>
 
           {/* Options Menu */}
