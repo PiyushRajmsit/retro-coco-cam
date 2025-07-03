@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogClose } from "@/components/ui/dialog";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Plus, Camera, ThumbsUp, ThumbsDown, Upload, Send, Edit, Share, Download } from "lucide-react";
 
 const CameraPage = () => {
@@ -13,6 +14,7 @@ const CameraPage = () => {
   const [query, setQuery] = useState("");
   const [chatMessages, setChatMessages] = useState<Array<{type: 'user' | 'bot', content: string, images?: string[]}>>([]);
   const [isEditMode, setIsEditMode] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<string>("Photo Filter");
 
   // Mock result images
   const resultImages = [
@@ -44,6 +46,53 @@ const CameraPage = () => {
   const uploadTypes = [
     "Portrait Photos", "Full Body Shots", "Casual Selfies", "Professional Headshots"
   ];
+
+  // Example images for carousel
+  const exampleImages = [
+    "https://images.unsplash.com/photo-1544005313-94ddf0286df2?height=200&width=200&fit=crop",
+    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?height=200&width=200&fit=crop",
+    "https://images.unsplash.com/photo-1494790108755-2616b612b786?height=200&width=200&fit=crop",
+    "https://images.unsplash.com/photo-1552374196-c4e7ffc6e126?height=200&width=200&fit=crop",
+    "https://images.unsplash.com/photo-1463453091185-61582044d556?height=200&width=200&fit=crop"
+  ];
+
+  // Category-specific content
+  const categoryContent = {
+    "Backgrounds": {
+      title: "Backgrounds Editing",
+      instruction: "Upload clear portrait photos with good lighting. The AI works best with photos where you're the main subject against any background.",
+      suggestions: ["Nature Background", "City Skyline", "Beach Scene", "Mountain View"]
+    },
+    "Photo Filters": {
+      title: "Photo Filters Editing", 
+      instruction: "Upload any photo to apply stunning filters. Works best with well-lit images and clear subjects.",
+      suggestions: ["Vintage Filter", "Black & White", "Sepia Tone", "HDR Effect"]
+    },
+    "Vibes": {
+      title: "Vibes Editing",
+      instruction: "Upload photos to transform the mood and atmosphere. Works great with lifestyle and portrait photos.",
+      suggestions: ["Moody Vibe", "Bright & Airy", "Dark Academia", "Cottagecore"]
+    },
+    "Fashion Outfits": {
+      title: "Fashion Outfits Editing",
+      instruction: "Upload full-body photos or upper-body shots for the best outfit transformation results.",
+      suggestions: ["Casual Chic", "Formal Wear", "Street Style", "Vintage Fashion"]
+    },
+    "Makeup": {
+      title: "Makeup Editing",
+      instruction: "Upload clear face photos with good lighting. Front-facing portraits work best for makeup transformations.",
+      suggestions: ["Natural Look", "Glam Makeup", "Smokey Eyes", "Bold Lips"]
+    }
+  };
+
+  // Get URL parameters to determine selected category
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const category = urlParams.get('category');
+    if (category && categoryContent[category as keyof typeof categoryContent]) {
+      setSelectedCategory(category);
+    }
+  }, []);
 
   const handleQuery = () => {
     if (query.trim()) {
@@ -136,57 +185,58 @@ const CameraPage = () => {
       <div className="flex-1 px-4 pb-32">
         {!showResults ? (
           <>
+            {/* Section 1: Dynamic Title */}
             <div className="text-center mb-8">
               <h2 className="text-4xl font-bold mb-2 bg-gradient-primary bg-clip-text text-transparent">
-                Photo Filter Editing
+                {categoryContent[selectedCategory as keyof typeof categoryContent]?.title || "Photo Filter Editing"}
               </h2>
+              {/* Section 2: Static subtitle */}
               <p className="text-muted-foreground text-lg">
                 Transform your photos with AI-powered filters and effects
               </p>
             </div>
 
-            {/* Upload Section */}
+            {/* Section 3: Instructions and Example Carousel */}
             <div className="mb-8">
-              <h3 className="text-lg font-semibold text-foreground mb-4">Upload Your Photo</h3>
-              <div className="grid grid-cols-2 gap-3 mb-6">
-                <button className="p-4 rounded-xl bg-card border border-border text-left hover:bg-accent transition-colors">
-                  <Upload className="w-6 h-6 text-primary mb-2" />
-                  <span className="text-sm text-foreground font-medium">Upload from Gallery</span>
-                </button>
-                <button className="p-4 rounded-xl bg-card border border-border text-left hover:bg-accent transition-colors">
-                  <Camera className="w-6 h-6 text-primary mb-2" />
-                  <span className="text-sm text-foreground font-medium">Take Photo</span>
-                </button>
+              <p className="text-foreground text-sm mb-6 px-2 leading-relaxed">
+                {categoryContent[selectedCategory as keyof typeof categoryContent]?.instruction || "Upload any photo to apply stunning transformations."}
+              </p>
+              
+              {/* Photo Examples Carousel */}
+              <div className="mb-6">
+                <h3 className="text-sm font-semibold text-foreground mb-4 px-2">Example Photos</h3>
+                <Carousel className="w-full">
+                  <CarouselContent className="-ml-2 md:-ml-4">
+                    {exampleImages.map((image, index) => (
+                      <CarouselItem key={index} className="pl-2 md:pl-4 basis-1/3">
+                        <div className="aspect-square rounded-xl overflow-hidden bg-card border border-border/50">
+                          <img 
+                            src={image} 
+                            alt={`Example ${index + 1}`}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+                  <CarouselPrevious className="left-2" />
+                  <CarouselNext className="right-2" />
+                </Carousel>
               </div>
             </div>
 
-            {/* Filter Categories */}
+            {/* Section 4: Suggestion Chips */}
             <div className="mb-8">
-              <h3 className="text-lg font-semibold text-foreground mb-4">Filter Categories</h3>
-              <div className="grid grid-cols-2 gap-3 mb-6">
-                {filterCategories.map((category, index) => (
+              <h3 className="text-sm font-semibold text-foreground mb-4 px-2">Try These</h3>
+              <div className="flex gap-2 overflow-x-auto scrollbar-hide px-2">
+                {(categoryContent[selectedCategory as keyof typeof categoryContent]?.suggestions || suggestions).map((suggestion, index) => (
                   <button
                     key={index}
-                    onClick={() => {
-                      setQuery(category);
-                      handleQuery();
-                    }}
-                    className="p-4 rounded-xl bg-card border border-border text-left hover:bg-accent transition-colors"
+                    onClick={() => setQuery(suggestion)}
+                    className="flex-shrink-0 px-4 py-2 bg-primary/20 text-primary rounded-full text-sm font-medium hover:bg-primary/30 transition-colors"
                   >
-                    <span className="text-sm text-foreground">{category}</span>
+                    {suggestion}
                   </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Best Image Types */}
-            <div className="mb-8">
-              <h3 className="text-lg font-semibold text-foreground mb-4">Best Results With</h3>
-              <div className="grid grid-cols-2 gap-3">
-                {uploadTypes.map((type, index) => (
-                  <div key={index} className="p-3 rounded-lg bg-primary/10 border border-primary/20 text-center">
-                    <span className="text-sm text-primary font-medium">{type}</span>
-                  </div>
                 ))}
               </div>
             </div>
@@ -360,6 +410,12 @@ const CameraPage = () => {
             {/* Action buttons - only show when not in edit mode */}
             {!isEditMode && (
               <div className="flex items-center justify-center gap-4 p-6 bg-background/80 backdrop-blur-sm">
+                <button className="p-3 rounded-full bg-card hover:bg-accent transition-colors">
+                  <Share className="w-6 h-6 text-foreground" />
+                </button>
+                <button className="p-3 rounded-full bg-card hover:bg-accent transition-colors">
+                  <Download className="w-6 h-6 text-foreground" />
+                </button>
                 <button className="p-3 rounded-full bg-card hover:bg-accent transition-colors">
                   <ThumbsUp className="w-6 h-6 text-foreground" />
                 </button>

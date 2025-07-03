@@ -31,7 +31,7 @@ export const StyleCard = ({ title, image, className = "" }: StyleCardProps) => {
             variant="mobile" 
             size="sm" 
             className="w-full"
-            onClick={() => window.location.href = '/camera'}
+            onClick={() => window.location.href = `/camera?category=${encodeURIComponent(title)}`}
           >
             Try it on
           </Button>
