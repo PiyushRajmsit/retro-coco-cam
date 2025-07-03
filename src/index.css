@@ -17,7 +17,7 @@ All colors MUST be HSL.
     --popover: 220 13% 11%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 270 100% 60%;
+    --primary: 213 91% 59%;
     --primary-foreground: 220 13% 9%;
 
     --secondary: 220 13% 15%;
@@ -26,7 +26,7 @@ All colors MUST be HSL.
     --muted: 220 13% 15%;
     --muted-foreground: 215.4 16.3% 65%;
 
-    --accent: 270 100% 60%;
+    --accent: 213 91% 59%;
     --accent-foreground: 220 13% 9%;
 
     --destructive: 0 84.2% 60.2%;
@@ -34,16 +34,16 @@ All colors MUST be HSL.
 
     --border: 220 13% 20%;
     --input: 220 13% 15%;
-    --ring: 270 100% 60%;
+    --ring: 213 91% 59%;
 
     --radius: 1rem;
 
     /* Custom gradient for mobile app */
-    --gradient-primary: linear-gradient(135deg, hsl(270 100% 60%), hsl(280 100% 65%));
+    --gradient-primary: linear-gradient(135deg, hsl(213 91% 59%), hsl(213 91% 65%));
     --gradient-card: linear-gradient(145deg, hsl(220 13% 11%), hsl(220 13% 13%));
     
     /* Custom shadows */
-    --shadow-glow: 0 0 30px hsl(270 100% 60% / 0.3);
+    --shadow-glow: 0 0 30px hsl(213 91% 59% / 0.3);
     --shadow-card: 0 8px 32px hsl(220 13% 5% / 0.4);
 
     --sidebar-background: 0 0% 98%;

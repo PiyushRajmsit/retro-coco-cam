@@ -33,7 +33,6 @@ export const StyleCard = ({ title, image, className = "" }: StyleCardProps) => {
             className="w-full"
             onClick={() => window.location.href = '/camera'}
           >
-            <Camera className="w-4 h-4" />
             Try it on
           </Button>
         </div>

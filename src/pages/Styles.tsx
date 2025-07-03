@@ -10,14 +10,11 @@ import imageSunset from "@/assets/sunset-beach.jpg";
 
 const Styles = () => {
   const styles = [
-    { title: "1950s style", image: image1950s },
-    { title: "brunch dressing", image: imageBrunch },
-    { title: "Summer Cocktail", image: imageSummer },
-    { title: "Retro Disco Dinner", image: imageRetro },
-    { title: "European Café Look", image: imageEuropean },
-    { title: "Tokyo Street Pop", image: imageTokyo },
-    { title: "Winter Chalet Elegance", image: imageWinter },
-    { title: "Sunset Beach Sundown", image: imageSunset },
+    { title: "Backgrounds", image: imageSunset },
+    { title: "Photo Filters", image: imageRetro },
+    { title: "Vibes", image: imageTokyo },
+    { title: "Fashion Outfits", image: image1950s },
+    { title: "Makeup", image: imageBrunch },
   ];
 
   return (

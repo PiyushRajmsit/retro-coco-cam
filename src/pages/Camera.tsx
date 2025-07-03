@@ -2,15 +2,17 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogClose } from "@/components/ui/dialog";
-import { Plus, Image, Link, ThumbsUp, ThumbsDown, Upload, Send, Edit } from "lucide-react";
+import { Plus, Camera, ThumbsUp, ThumbsDown, Upload, Send, Edit, Share, Download } from "lucide-react";
 
-const Camera = () => {
+const CameraPage = () => {
   const [showOptions, setShowOptions] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const [selectedImage, setSelectedImage] = useState<number | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [editingImage, setEditingImage] = useState<string | null>(null);
   const [query, setQuery] = useState("");
+  const [chatMessages, setChatMessages] = useState<Array<{type: 'user' | 'bot', content: string, images?: string[]}>>([]);
+  const [isEditMode, setIsEditMode] = useState(false);
 
   // Mock result images
   const resultImages = [
@@ -21,37 +23,76 @@ const Camera = () => {
   ];
 
   const followUpPrompts = [
-    "urban graffiti wall",
-    "soft natural light", 
-    "casual cafe setting",
-    "wooden table texture",
-    "park with greenery",
-    "vintage filter effect"
+    "Golden Hour Glow",
+    "Y2K", 
+    "Melancholic",
+    "Nostalgic",
+    "VHS"
+  ];
+
+  const suggestions = [
+    "Photo-Filters",
+    "Makeup",
+    "Fashion Trends", 
+    "Background filters"
+  ];
+
+  const filterCategories = [
+    "Backgrounds", "Photo Filters", "Vibes", "Fashion Outfits", "Makeup"
+  ];
+
+  const uploadTypes = [
+    "Portrait Photos", "Full Body Shots", "Casual Selfies", "Professional Headshots"
   ];
 
   const handleQuery = () => {
     if (query.trim()) {
+      // Add user message
+      const newMessages = [...chatMessages, { type: 'user' as const, content: query }];
+      
+      // Add bot response with images
+      const botResponse = {
+        type: 'bot' as const,
+        content: `Here are some amazing transformations based on "${query}". I've generated these images with the style you requested!`,
+        images: resultImages
+      };
+      
+      setChatMessages([...newMessages, botResponse]);
       setShowResults(true);
+      setQuery("");
     }
   };
 
   const openImageView = (index: number) => {
     setSelectedImage(index);
     setCurrentImageIndex(index);
+    setIsEditMode(false);
   };
 
   const closeImageView = () => {
     setSelectedImage(null);
     setEditingImage(null);
+    setIsEditMode(false);
   };
 
   const handleEditImage = () => {
-    setEditingImage(resultImages[currentImageIndex]);
-    setSelectedImage(null);
-    // Scroll down to show follow-up suggestions above chat input
-    setTimeout(() => {
-      window.scrollTo({ top: document.body.scrollHeight - window.innerHeight + 100, behavior: 'smooth' });
-    }, 100);
+    setIsEditMode(true);
+    // Don't close the dialog, just show edit interface
+  };
+
+  const handleEditSubmit = () => {
+    if (query.trim()) {
+      // Add the edit as a new message and close the dialog
+      const newMessages = [...chatMessages, 
+        { type: 'user' as const, content: query },
+        { type: 'bot' as const, content: `Great! I've applied "${query}" to your image. Here are the new results!`, images: resultImages }
+      ];
+      setChatMessages(newMessages);
+      setQuery("");
+      setIsEditMode(false);
+      setSelectedImage(null);
+      setShowResults(true);
+    }
   };
 
   const nextImage = () => {
@@ -61,20 +102,6 @@ const Camera = () => {
   const prevImage = () => {
     setCurrentImageIndex((prev) => (prev - 1 + resultImages.length) % resultImages.length);
   };
-
-  const suggestions = [
-    "Photo-Filters",
-    "Makeup",
-    "Fashion Trends", 
-    "Background filters"
-  ];
-
-  const quickActions = [
-    "Transform my style",
-    "Apply vintage filter",
-    "Change background",
-    "Add makeup effects"
-  ];
 
   return (
     <div className="min-h-screen bg-background">
@@ -106,67 +133,106 @@ const Camera = () => {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col items-center justify-center px-4 pb-32">
+      <div className="flex-1 px-4 pb-32">
         {!showResults ? (
           <>
             <div className="text-center mb-8">
               <h2 className="text-4xl font-bold mb-2 bg-gradient-primary bg-clip-text text-transparent">
-                Hello, Piyush
+                Photo Filter Editing
               </h2>
               <p className="text-muted-foreground text-lg">
-                What would you like to transform today?
+                Transform your photos with AI-powered filters and effects
               </p>
             </div>
 
-            {/* Quick Action Suggestions */}
-            <div className="grid grid-cols-2 gap-3 w-full max-w-md mb-8">
-              {quickActions.map((action, index) => (
-                <button
-                  key={index}
-                  onClick={() => {
-                    setQuery(action);
-                    handleQuery();
-                  }}
-                  className="p-4 rounded-xl bg-card border border-border text-left hover:bg-accent transition-colors"
-                >
-                  <span className="text-sm text-foreground">{action}</span>
+            {/* Upload Section */}
+            <div className="mb-8">
+              <h3 className="text-lg font-semibold text-foreground mb-4">Upload Your Photo</h3>
+              <div className="grid grid-cols-2 gap-3 mb-6">
+                <button className="p-4 rounded-xl bg-card border border-border text-left hover:bg-accent transition-colors">
+                  <Upload className="w-6 h-6 text-primary mb-2" />
+                  <span className="text-sm text-foreground font-medium">Upload from Gallery</span>
                 </button>
-              ))}
+                <button className="p-4 rounded-xl bg-card border border-border text-left hover:bg-accent transition-colors">
+                  <Camera className="w-6 h-6 text-primary mb-2" />
+                  <span className="text-sm text-foreground font-medium">Take Photo</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Filter Categories */}
+            <div className="mb-8">
+              <h3 className="text-lg font-semibold text-foreground mb-4">Filter Categories</h3>
+              <div className="grid grid-cols-2 gap-3 mb-6">
+                {filterCategories.map((category, index) => (
+                  <button
+                    key={index}
+                    onClick={() => {
+                      setQuery(category);
+                      handleQuery();
+                    }}
+                    className="p-4 rounded-xl bg-card border border-border text-left hover:bg-accent transition-colors"
+                  >
+                    <span className="text-sm text-foreground">{category}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Best Image Types */}
+            <div className="mb-8">
+              <h3 className="text-lg font-semibold text-foreground mb-4">Best Results With</h3>
+              <div className="grid grid-cols-2 gap-3">
+                {uploadTypes.map((type, index) => (
+                  <div key={index} className="p-3 rounded-lg bg-primary/10 border border-primary/20 text-center">
+                    <span className="text-sm text-primary font-medium">{type}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </>
         ) : (
           <>
-            {/* Results Header */}
-            <div className="text-center mb-6">
-              <h2 className="text-2xl font-bold text-foreground mb-2">Your Results</h2>
-              <p className="text-muted-foreground">Generated images for: "{query}"</p>
-            </div>
-
-            {/* Results Grid */}
-            <div className="grid grid-cols-2 gap-4 w-full max-w-md mb-8">
-              {resultImages.map((image, index) => (
-                <button
-                  key={index}
-                  onClick={() => openImageView(index)}
-                  className="aspect-square rounded-xl overflow-hidden bg-card border border-border hover:border-primary/50 transition-colors"
-                >
-                  <img 
-                    src={image} 
-                    alt={`Result ${index + 1}`}
-                    className="w-full h-full object-cover"
-                  />
-                </button>
+            {/* Chat Messages */}
+            <div className="space-y-6">
+              {chatMessages.map((message, index) => (
+                <div key={index} className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}>
+                  <div className={`max-w-[80%] ${message.type === 'user' ? 'bg-primary text-primary-foreground' : 'bg-card'} rounded-2xl p-4`}>
+                    <p className="text-sm">{message.content}</p>
+                    {message.images && (
+                      <div className="grid grid-cols-2 gap-3 mt-4">
+                        {message.images.map((image, imgIndex) => (
+                          <button
+                            key={imgIndex}
+                            onClick={() => openImageView(imgIndex)}
+                            className="aspect-square rounded-xl overflow-hidden bg-card border border-border hover:border-primary/50 transition-colors"
+                          >
+                            <img 
+                              src={image} 
+                              alt={`Result ${imgIndex + 1}`}
+                              className="w-full h-full object-cover"
+                            />
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
               ))}
             </div>
 
-            {/* Back to Chat Button */}
-            <Button 
-              onClick={() => setShowResults(false)}
-              variant="outline"
-              className="mb-4"
-            >
-              Generate New Images
-            </Button>
+            {/* Back to Start Button */}
+            <div className="text-center mt-8">
+              <Button 
+                onClick={() => {
+                  setShowResults(false);
+                  setChatMessages([]);
+                }}
+                variant="outline"
+              >
+                Start New Session
+              </Button>
+            </div>
           </>
         )}
       </div>
@@ -174,47 +240,6 @@ const Camera = () => {
       {/* Chat Input Area */}
       <div className="fixed bottom-20 left-0 right-0 px-4">
         <div className="bg-card rounded-2xl border border-border p-4">
-          {/* Follow-up Prompts for Editing */}
-          {editingImage && (
-            <div className="mb-4">
-              <p className="text-sm font-medium text-foreground mb-3">Suggested</p>
-              <div className="flex gap-2 mb-4 overflow-x-auto scrollbar-hide">
-                {followUpPrompts.map((prompt, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setQuery(prompt)}
-                    className="flex-shrink-0 px-3 py-2 bg-primary/20 text-primary rounded-lg text-sm font-medium hover:bg-primary/30 transition-colors"
-                  >
-                    {prompt}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Editing Image Preview */}
-          {editingImage && (
-            <div className="mb-4 p-3 bg-primary/10 rounded-lg border border-primary/20">
-              <div className="flex items-center gap-3">
-                <img 
-                  src={editingImage} 
-                  alt="Editing" 
-                  className="w-12 h-12 rounded-lg object-cover"
-                />
-                <div className="flex-1">
-                  <p className="text-sm text-foreground font-medium">Editing image</p>
-                  <p className="text-xs text-muted-foreground">Make changes to this image</p>
-                </div>
-                <button 
-                  onClick={() => setEditingImage(null)}
-                  className="text-muted-foreground hover:text-foreground"
-                >
-                  ×
-                </button>
-              </div>
-            </div>
-          )}
-
           {/* Input with Actions */}
           <div className="relative">
             <button
@@ -226,8 +251,8 @@ const Camera = () => {
             <Input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Upload an Image and Select one of categories below"
-              className="pl-12 pr-12 bg-background border-border text-sm placeholder:text-xs"
+              placeholder="Describe the filter or effect you want to apply..."
+              className="pl-12 pr-12 bg-background border-border text-sm"
               onKeyPress={(e) => e.key === 'Enter' && handleQuery()}
             />
             <button
@@ -259,8 +284,8 @@ const Camera = () => {
                 <span className="text-foreground">Attach an Image</span>
               </button>
               <button className="flex items-center gap-3 w-full p-3 rounded-lg bg-background hover:bg-accent transition-colors">
-                <Link className="w-5 h-5 text-primary" />
-                <span className="text-foreground">Share Image Url</span>
+                <Camera className="w-5 h-5 text-primary" />
+                <span className="text-foreground">Take a Photo</span>
               </button>
             </div>
           )}
@@ -276,6 +301,16 @@ const Camera = () => {
               ×
             </DialogClose>
 
+            {/* Share and Download buttons */}
+            <div className="absolute top-4 left-4 z-10 flex gap-2">
+              <button className="p-2 bg-background/80 backdrop-blur-sm rounded-full hover:bg-background transition-colors">
+                <Share className="w-5 h-5 text-foreground" />
+              </button>
+              <button className="p-2 bg-background/80 backdrop-blur-sm rounded-full hover:bg-background transition-colors">
+                <Download className="w-5 h-5 text-foreground" />
+              </button>
+            </div>
+
             {/* Image container */}
             <div className="flex-1 flex items-center justify-center p-4">
               <img 
@@ -285,48 +320,93 @@ const Camera = () => {
               />
             </div>
 
-            {/* Action buttons */}
-            <div className="flex items-center justify-center gap-4 p-6 bg-background/80 backdrop-blur-sm">
-              <button className="p-3 rounded-full bg-card hover:bg-accent transition-colors">
-                <ThumbsUp className="w-6 h-6 text-foreground" />
-              </button>
-              <button className="p-3 rounded-full bg-card hover:bg-accent transition-colors">
-                <ThumbsDown className="w-6 h-6 text-foreground" />
-              </button>
-              <button 
-                onClick={handleEditImage}
-                className="p-3 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
-              >
-                <Edit className="w-6 h-6" />
-              </button>
-            </div>
+            {/* Edit Mode Chat Interface */}
+            {isEditMode && (
+              <div className="absolute bottom-0 left-0 right-0 bg-background/95 backdrop-blur-md border-t border-border p-4">
+                {/* Follow-up suggestions */}
+                <div className="mb-4">
+                  <div className="flex gap-2 mb-4 overflow-x-auto scrollbar-hide">
+                    {followUpPrompts.map((prompt, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setQuery(prompt)}
+                        className="flex-shrink-0 px-4 py-2 bg-primary/20 text-primary rounded-full text-sm font-medium hover:bg-primary/30 transition-colors"
+                      >
+                        {prompt}
+                      </button>
+                    ))}
+                  </div>
+                </div>
 
-            {/* Image navigation dots */}
-            <div className="flex items-center justify-center gap-2 pb-4">
-              {resultImages.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentImageIndex(index)}
-                  className={`w-2 h-2 rounded-full transition-colors ${
-                    index === currentImageIndex ? 'bg-primary' : 'bg-muted'
-                  }`}
-                />
-              ))}
-            </div>
+                {/* Input for editing */}
+                <div className="relative">
+                  <Input
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    placeholder="Describe how you want to edit this image..."
+                    className="pr-12 bg-background border-border text-sm"
+                    onKeyPress={(e) => e.key === 'Enter' && handleEditSubmit()}
+                  />
+                  <button
+                    onClick={handleEditSubmit}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 p-2 hover:bg-accent rounded-md transition-colors"
+                  >
+                    <Send className="w-4 h-4 text-primary" />
+                  </button>
+                </div>
+              </div>
+            )}
 
-            {/* Swipe navigation */}
-            <button 
-              onClick={prevImage}
-              className="absolute left-4 top-1/2 transform -translate-y-1/2 p-2 bg-background/80 backdrop-blur-sm rounded-full"
-            >
-              ←
-            </button>
-            <button 
-              onClick={nextImage}
-              className="absolute right-4 top-1/2 transform -translate-y-1/2 p-2 bg-background/80 backdrop-blur-sm rounded-full"
-            >
-              →
-            </button>
+            {/* Action buttons - only show when not in edit mode */}
+            {!isEditMode && (
+              <div className="flex items-center justify-center gap-4 p-6 bg-background/80 backdrop-blur-sm">
+                <button className="p-3 rounded-full bg-card hover:bg-accent transition-colors">
+                  <ThumbsUp className="w-6 h-6 text-foreground" />
+                </button>
+                <button className="p-3 rounded-full bg-card hover:bg-accent transition-colors">
+                  <ThumbsDown className="w-6 h-6 text-foreground" />
+                </button>
+                <button 
+                  onClick={handleEditImage}
+                  className="p-3 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+                >
+                  <Edit className="w-6 h-6" />
+                </button>
+              </div>
+            )}
+
+            {/* Image navigation dots - only show when not in edit mode */}
+            {!isEditMode && (
+              <div className="flex items-center justify-center gap-2 pb-4">
+                {resultImages.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentImageIndex(index)}
+                    className={`w-2 h-2 rounded-full transition-colors ${
+                      index === currentImageIndex ? 'bg-primary' : 'bg-muted'
+                    }`}
+                  />
+                ))}
+              </div>
+            )}
+
+            {/* Swipe navigation - only show when not in edit mode */}
+            {!isEditMode && (
+              <>
+                <button 
+                  onClick={prevImage}
+                  className="absolute left-4 top-1/2 transform -translate-y-1/2 p-2 bg-background/80 backdrop-blur-sm rounded-full"
+                >
+                  ←
+                </button>
+                <button 
+                  onClick={nextImage}
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 p-2 bg-background/80 backdrop-blur-sm rounded-full"
+                >
+                  →
+                </button>
+              </>
+            )}
           </div>
         </DialogContent>
       </Dialog>
@@ -371,4 +451,4 @@ const Camera = () => {
   );
 };
 
-export default Camera;
+export default CameraPage;
