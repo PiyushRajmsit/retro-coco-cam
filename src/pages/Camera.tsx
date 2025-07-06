@@ -228,12 +228,12 @@ const CameraPage = () => {
             {/* Section 4: Suggestion Chips */}
             <div className="mb-8">
               <h3 className="text-sm font-semibold text-foreground mb-4 px-2">Try These</h3>
-              <div className="flex flex-col gap-3 px-2">
+              <div className="flex gap-2 overflow-x-auto scrollbar-hide px-2">
                 {(categoryContent[selectedCategory as keyof typeof categoryContent]?.suggestions || suggestions).map((suggestion, index) => (
                   <button
                     key={index}
                     onClick={() => setQuery(suggestion)}
-                    className="w-full px-4 py-3 bg-primary/20 text-primary rounded-full text-sm font-medium hover:bg-primary/30 transition-colors text-left"
+                    className="flex-shrink-0 px-4 py-2 bg-primary/20 text-primary rounded-full text-sm font-medium hover:bg-primary/30 transition-colors"
                   >
                     {suggestion}
                   </button>
