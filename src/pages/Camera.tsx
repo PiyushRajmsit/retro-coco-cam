@@ -12,7 +12,7 @@ const CameraPage = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [editingImage, setEditingImage] = useState<string | null>(null);
   const [query, setQuery] = useState("");
-  const [chatMessages, setChatMessages] = useState<Array<{type: 'user' | 'bot', content: string, images?: string[]}>>([]);
+  const [chatMessages, setChatMessages] = useState<Array<{type: 'user' | 'bot', content: string, images?: string[], editedImage?: string}>>([]);
   const [isEditMode, setIsEditMode] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string>("Photo Filter");
 
@@ -132,8 +132,9 @@ const CameraPage = () => {
   const handleEditSubmit = () => {
     if (query.trim()) {
       // Add the edit as a new message and close the dialog
+      const editedImageUrl = resultImages[currentImageIndex];
       const newMessages = [...chatMessages, 
-        { type: 'user' as const, content: query },
+        { type: 'user' as const, content: query, editedImage: editedImageUrl },
         { type: 'bot' as const, content: `Great! I've applied "${query}" to your image. Here are the new results!`, images: resultImages }
       ];
       setChatMessages(newMessages);
@@ -248,6 +249,17 @@ const CameraPage = () => {
               {chatMessages.map((message, index) => (
                 <div key={index} className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}>
                   <div className={`max-w-[80%] ${message.type === 'user' ? 'bg-primary text-primary-foreground' : 'bg-card'} rounded-2xl p-4`}>
+                    {message.editedImage && (
+                      <div className="mb-3">
+                        <div className="w-12 h-12 rounded-lg overflow-hidden border border-border/50">
+                          <img 
+                            src={message.editedImage} 
+                            alt="Edited image"
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      </div>
+                    )}
                     <p className="text-sm">{message.content}</p>
                     {message.images && (
                       <div className="grid grid-cols-2 gap-3 mt-4">
