@@ -10,11 +10,11 @@ import imageSunset from "@/assets/sunset-beach.jpg";
 
 const Styles = () => {
   const styles = [
-    { title: "Backgrounds", image: imageSunset },
+    { title: "Background Filters", image: imageSunset },
     { title: "Photo Filters", image: imageRetro },
-    { title: "Vibes", image: imageTokyo },
     { title: "Fashion Outfits", image: image1950s },
-    { title: "Makeup", image: imageBrunch },
+    { title: "Makeup Trends", image: imageBrunch },
+    { title: "Vibes", image: imageTokyo },
   ];
 
   return (
