@@ -3,12 +3,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogClose } from "@/components/ui/dialog";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
-import { Plus, Camera, ThumbsUp, ThumbsDown, Upload, Send, Edit, Share, Download } from "lucide-react";
+import { Plus, Camera, ThumbsUp, ThumbsDown, Upload, Send, Edit, Share, Download, Copy, Twitter, Facebook, Instagram, Mail, Link, MessageCircle } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
 
 const CameraPage = () => {
   const [showOptions, setShowOptions] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const [selectedImage, setSelectedImage] = useState<number | null>(null);
+  const [showShareModal, setShowShareModal] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [editingImage, setEditingImage] = useState<string | null>(null);
   const [query, setQuery] = useState("");
@@ -365,7 +367,10 @@ const CameraPage = () => {
 
             {/* Share and Download buttons */}
             <div className="absolute top-4 left-4 z-10 flex gap-2">
-              <button className="p-2 bg-background/80 backdrop-blur-sm rounded-full hover:bg-background transition-colors">
+              <button 
+                onClick={() => setShowShareModal(true)}
+                className="p-2 bg-background/80 backdrop-blur-sm rounded-full hover:bg-background transition-colors"
+              >
                 <Share className="w-5 h-5 text-foreground" />
               </button>
               <button className="p-2 bg-background/80 backdrop-blur-sm rounded-full hover:bg-background transition-colors">
@@ -515,6 +520,112 @@ const CameraPage = () => {
           </button>
         </div>
       </div>
+
+      {/* Share Modal */}
+      <Dialog open={showShareModal} onOpenChange={setShowShareModal}>
+        <DialogContent className="max-w-md p-0 bg-background border border-border/50 shadow-elegant">
+          <div className="p-6">
+            <div className="text-center mb-6">
+              <h3 className="text-xl font-playfair font-semibold text-foreground mb-2">Share Your Creation</h3>
+              <p className="text-sm text-muted-foreground">Choose how you'd like to share this image</p>
+            </div>
+
+            <div className="grid grid-cols-3 gap-4 mb-6">
+              <button 
+                onClick={() => {
+                  navigator.clipboard.writeText(window.location.href);
+                  toast({ title: "Link copied to clipboard!" });
+                  setShowShareModal(false);
+                }}
+                className="flex flex-col items-center gap-2 p-4 rounded-xl bg-gradient-primary/10 hover:bg-gradient-primary/20 transition-colors group"
+              >
+                <div className="w-10 h-10 bg-gradient-primary rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <Copy className="w-5 h-5 text-primary-foreground" />
+                </div>
+                <span className="text-xs font-poppins font-medium text-foreground">Copy Link</span>
+              </button>
+
+              <button 
+                onClick={() => {
+                  window.open(`https://twitter.com/intent/tweet?text=Check out my AI creation!&url=${encodeURIComponent(window.location.href)}`, '_blank');
+                  setShowShareModal(false);
+                }}
+                className="flex flex-col items-center gap-2 p-4 rounded-xl bg-blue-500/10 hover:bg-blue-500/20 transition-colors group"
+              >
+                <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <Twitter className="w-5 h-5 text-white" />
+                </div>
+                <span className="text-xs font-poppins font-medium text-foreground">Twitter</span>
+              </button>
+
+              <button 
+                onClick={() => {
+                  window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`, '_blank');
+                  setShowShareModal(false);
+                }}
+                className="flex flex-col items-center gap-2 p-4 rounded-xl bg-blue-600/10 hover:bg-blue-600/20 transition-colors group"
+              >
+                <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <Facebook className="w-5 h-5 text-white" />
+                </div>
+                <span className="text-xs font-poppins font-medium text-foreground">Facebook</span>
+              </button>
+
+              <button 
+                onClick={() => {
+                  window.open(`mailto:?subject=Check out my AI creation!&body=I created this using Coco AI: ${window.location.href}`, '_blank');
+                  setShowShareModal(false);
+                }}
+                className="flex flex-col items-center gap-2 p-4 rounded-xl bg-green-500/10 hover:bg-green-500/20 transition-colors group"
+              >
+                <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <Mail className="w-5 h-5 text-white" />
+                </div>
+                <span className="text-xs font-poppins font-medium text-foreground">Email</span>
+              </button>
+
+              <button 
+                onClick={() => {
+                  window.open(`https://wa.me/?text=Check out my AI creation! ${encodeURIComponent(window.location.href)}`, '_blank');
+                  setShowShareModal(false);
+                }}
+                className="flex flex-col items-center gap-2 p-4 rounded-xl bg-green-600/10 hover:bg-green-600/20 transition-colors group"
+              >
+                <div className="w-10 h-10 bg-green-600 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <MessageCircle className="w-5 h-5 text-white" />
+                </div>
+                <span className="text-xs font-poppins font-medium text-foreground">WhatsApp</span>
+              </button>
+
+              <button 
+                onClick={() => {
+                  const link = document.createElement('a');
+                  link.href = resultImages[currentImageIndex];
+                  link.download = 'coco-ai-creation.jpg';
+                  link.click();
+                  toast({ title: "Image downloaded!" });
+                  setShowShareModal(false);
+                }}
+                className="flex flex-col items-center gap-2 p-4 rounded-xl bg-purple-500/10 hover:bg-purple-500/20 transition-colors group"
+              >
+                <div className="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <Download className="w-5 h-5 text-white" />
+                </div>
+                <span className="text-xs font-poppins font-medium text-foreground">Download</span>
+              </button>
+            </div>
+
+            <div className="text-center">
+              <button 
+                onClick={() => setShowShareModal(false)}
+                className="px-6 py-2 text-sm font-poppins text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
