@@ -20,25 +20,28 @@ const Styles = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <div className="flex items-center justify-between p-4 pb-6">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
-            <span className="text-primary-foreground font-bold text-sm">C</span>
+      <div className="flex items-center justify-between p-6 pb-8 bg-gradient-primary/5 border-b border-border/30">
+        <div className="flex items-center gap-4">
+          <div className="w-10 h-10 bg-gradient-primary rounded-xl flex items-center justify-center shadow-glow">
+            <span className="text-primary-foreground font-bold font-playfair text-lg">C</span>
           </div>
-          <h1 className="text-2xl font-bold text-foreground">Coco AI</h1>
+          <div className="flex flex-col">
+            <h1 className="text-3xl font-bold font-playfair text-foreground tracking-tight">Coco AI</h1>
+            <p className="text-sm font-poppins text-muted-foreground font-medium">Style & Creative Studio</p>
+          </div>
         </div>
         
         <div className="flex items-center gap-3">
-          <button className="p-2 rounded-full bg-secondary">
+          <button className="p-3 rounded-xl bg-secondary/80 hover:bg-secondary transition-colors shadow-sm">
             <svg className="w-5 h-5 text-secondary-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
           </button>
           <button 
             onClick={() => window.location.href = '/profile'}
-            className="w-8 h-8 bg-gradient-primary rounded-full flex items-center justify-center"
+            className="w-10 h-10 bg-gradient-primary rounded-xl flex items-center justify-center shadow-glow hover:scale-105 transition-transform"
           >
-            <svg className="w-4 h-4 text-primary-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 text-primary-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
               <circle cx="12" cy="7" r="4" />
             </svg>
