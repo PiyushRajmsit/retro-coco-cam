@@ -50,23 +50,64 @@ const Styles = () => {
       </div>
 
       {/* Style Grid */}
-      <div className="px-4 pb-20 space-y-4">
-        {/* Featured card */}
-        <StyleCard
-          title={styles[0].title}
-          image={styles[0].image}
-          className="w-full"
-        />
-        
-        {/* Grid for remaining 4 cards */}
-        <div className="grid grid-cols-2 gap-4">
-          {styles.slice(1).map((style, index) => (
-            <StyleCard
-              key={index + 1}
-              title={style.title}
-              image={style.image}
-            />
-          ))}
+      <div className="px-4 pb-20">
+        {/* Mobile Layout */}
+        <div className="md:hidden space-y-4">
+          {/* Featured card */}
+          <StyleCard
+            title={styles[0].title}
+            image={styles[0].image}
+            className="w-full"
+          />
+          
+          {/* Grid for remaining 4 cards */}
+          <div className="grid grid-cols-2 gap-4">
+            {styles.slice(1).map((style, index) => (
+              <StyleCard
+                key={index + 1}
+                title={style.title}
+                image={style.image}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Desktop Layout */}
+        <div className="hidden md:grid grid-cols-6 gap-4 auto-rows-fr">
+          {/* Background Filters - large card */}
+          <StyleCard
+            title={styles[0].title}
+            image={styles[0].image}
+            className="col-span-3 row-span-2"
+          />
+          
+          {/* Photo Filters - medium card */}
+          <StyleCard
+            title={styles[1].title}
+            image={styles[1].image}
+            className="col-span-2"
+          />
+          
+          {/* Fashion Outfits - small card */}
+          <StyleCard
+            title={styles[2].title}
+            image={styles[2].image}
+            className="col-span-1"
+          />
+          
+          {/* Makeup Trends - medium card */}
+          <StyleCard
+            title={styles[3].title}
+            image={styles[3].image}
+            className="col-span-2"
+          />
+          
+          {/* Vibes - small card */}
+          <StyleCard
+            title={styles[4].title}
+            image={styles[4].image}
+            className="col-span-1"
+          />
         </div>
       </div>
 
