@@ -72,35 +72,40 @@ const Styles = () => {
           </div>
         </div>
 
-        {/* Desktop Layout */}
-        <div className="hidden md:block space-y-4">
-          {/* First row - 2 cards */}
-          <div className="grid grid-cols-2 gap-4">
-            <StyleCard
-              title={styles[0].title}
-              image={styles[0].image}
-            />
-            <StyleCard
-              title={styles[1].title}
-              image={styles[1].image}
-            />
-          </div>
+        {/* Desktop Layout - Innovative Grid */}
+        <div className="hidden md:grid grid-cols-4 grid-rows-3 gap-4 h-[600px]">
+          {/* Hero card - takes up left 2 columns, all 3 rows */}
+          <StyleCard
+            title={styles[0].title}
+            image={styles[0].image}
+            className="col-span-2 row-span-3"
+          />
           
-          {/* Second row - 3 cards */}
-          <div className="grid grid-cols-3 gap-4">
-            <StyleCard
-              title={styles[2].title}
-              image={styles[2].image}
-            />
-            <StyleCard
-              title={styles[3].title}
-              image={styles[3].image}
-            />
-            <StyleCard
-              title={styles[4].title}
-              image={styles[4].image}
-            />
-          </div>
+          {/* Top right card */}
+          <StyleCard
+            title={styles[1].title}
+            image={styles[1].image}
+            className="col-span-2 row-span-1"
+          />
+          
+          {/* Middle right - 2 cards side by side */}
+          <StyleCard
+            title={styles[2].title}
+            image={styles[2].image}
+            className="col-span-1 row-span-1"
+          />
+          <StyleCard
+            title={styles[3].title}
+            image={styles[3].image}
+            className="col-span-1 row-span-1"
+          />
+          
+          {/* Bottom right card */}
+          <StyleCard
+            title={styles[4].title}
+            image={styles[4].image}
+            className="col-span-2 row-span-1"
+          />
         </div>
       </div>
 
