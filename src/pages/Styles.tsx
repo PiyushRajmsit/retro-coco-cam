@@ -73,41 +73,34 @@ const Styles = () => {
         </div>
 
         {/* Desktop Layout */}
-        <div className="hidden md:grid grid-cols-6 gap-4 auto-rows-fr">
-          {/* Background Filters - large card */}
-          <StyleCard
-            title={styles[0].title}
-            image={styles[0].image}
-            className="col-span-3 row-span-2"
-          />
+        <div className="hidden md:block space-y-4">
+          {/* First row - 2 cards */}
+          <div className="grid grid-cols-2 gap-4">
+            <StyleCard
+              title={styles[0].title}
+              image={styles[0].image}
+            />
+            <StyleCard
+              title={styles[1].title}
+              image={styles[1].image}
+            />
+          </div>
           
-          {/* Photo Filters - medium card */}
-          <StyleCard
-            title={styles[1].title}
-            image={styles[1].image}
-            className="col-span-2"
-          />
-          
-          {/* Fashion Outfits - small card */}
-          <StyleCard
-            title={styles[2].title}
-            image={styles[2].image}
-            className="col-span-1"
-          />
-          
-          {/* Makeup Trends - medium card */}
-          <StyleCard
-            title={styles[3].title}
-            image={styles[3].image}
-            className="col-span-2"
-          />
-          
-          {/* Vibes - small card */}
-          <StyleCard
-            title={styles[4].title}
-            image={styles[4].image}
-            className="col-span-1"
-          />
+          {/* Second row - 3 cards */}
+          <div className="grid grid-cols-3 gap-4">
+            <StyleCard
+              title={styles[2].title}
+              image={styles[2].image}
+            />
+            <StyleCard
+              title={styles[3].title}
+              image={styles[3].image}
+            />
+            <StyleCard
+              title={styles[4].title}
+              image={styles[4].image}
+            />
+          </div>
         </div>
       </div>
 
