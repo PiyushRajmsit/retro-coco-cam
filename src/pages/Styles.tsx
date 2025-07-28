@@ -50,35 +50,23 @@ const Styles = () => {
       </div>
 
       {/* Style Grid */}
-      <div className="px-4 pb-20">
-        <div className="grid grid-cols-4 gap-4">
-          {/* Top row - Background Filters spans 2 columns */}
-          <StyleCard
-            title={styles[0].title}
-            image={styles[0].image}
-            className="col-span-2"
-          />
-          {/* Photo Filters - normal size */}
-          <StyleCard
-            title={styles[1].title}
-            image={styles[1].image}
-            className="col-span-2"
-          />
-          
-          {/* Bottom row - Fashion Outfits normal, Makeup Trends normal, Vibes spans 2 columns */}
-          <StyleCard
-            title={styles[2].title}
-            image={styles[2].image}
-          />
-          <StyleCard
-            title={styles[3].title}
-            image={styles[3].image}
-          />
-          <StyleCard
-            title={styles[4].title}
-            image={styles[4].image}
-            className="col-span-2"
-          />
+      <div className="px-4 pb-20 space-y-4">
+        {/* Featured card */}
+        <StyleCard
+          title={styles[0].title}
+          image={styles[0].image}
+          className="w-full"
+        />
+        
+        {/* Grid for remaining 4 cards */}
+        <div className="grid grid-cols-2 gap-4">
+          {styles.slice(1).map((style, index) => (
+            <StyleCard
+              key={index + 1}
+              title={style.title}
+              image={style.image}
+            />
+          ))}
         </div>
       </div>
 
