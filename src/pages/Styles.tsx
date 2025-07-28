@@ -73,22 +73,22 @@ const Styles = () => {
         </div>
 
         {/* Desktop Layout - Innovative Grid */}
-        <div className="hidden md:grid grid-cols-4 grid-rows-3 gap-4 h-[600px]">
-          {/* Hero card - takes up left 2 columns, all 3 rows */}
+        <div className="hidden md:grid grid-cols-6 grid-rows-2 gap-4 min-h-[500px]">
+          {/* Hero card - takes up left 3 columns, both rows */}
           <StyleCard
             title={styles[0].title}
             image={styles[0].image}
-            className="col-span-2 row-span-3"
+            className="col-span-3 row-span-2"
           />
           
-          {/* Top right card */}
+          {/* Top right - 2 cards */}
           <StyleCard
             title={styles[1].title}
             image={styles[1].image}
-            className="col-span-2 row-span-1"
+            className="col-span-3 row-span-1"
           />
           
-          {/* Middle right - 2 cards side by side */}
+          {/* Bottom right - 3 smaller cards */}
           <StyleCard
             title={styles[2].title}
             image={styles[2].image}
@@ -99,12 +99,10 @@ const Styles = () => {
             image={styles[3].image}
             className="col-span-1 row-span-1"
           />
-          
-          {/* Bottom right card */}
           <StyleCard
             title={styles[4].title}
             image={styles[4].image}
-            className="col-span-2 row-span-1"
+            className="col-span-1 row-span-1"
           />
         </div>
       </div>
