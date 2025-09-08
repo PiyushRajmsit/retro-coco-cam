@@ -51,9 +51,10 @@ export const UploadModal = ({ children, onImageSelect }: UploadModalProps) => {
           {children}
         </PopoverTrigger>
         <PopoverContent 
-          className="w-80 p-0 bg-card border border-border shadow-lg" 
+          className="w-80 p-0 bg-card border border-border shadow-lg ml-4" 
           side="top" 
           sideOffset={8}
+          align="start"
         >
           <Tabs defaultValue="upload" className="w-full">
             <div className="px-4 pt-4 pb-2">
