@@ -5,9 +5,9 @@ import { Dialog, DialogContent, DialogClose } from "@/components/ui/dialog";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Plus, Camera, ThumbsUp, ThumbsDown, Upload, Send, Edit, Share, Download, Copy, Twitter, Facebook, Instagram, Mail, Link, MessageCircle } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { UploadModal } from "@/components/UploadModal";
 
 const CameraPage = () => {
-  const [showOptions, setShowOptions] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const [selectedImage, setSelectedImage] = useState<number | null>(null);
   const [showShareModal, setShowShareModal] = useState(false);
@@ -145,6 +145,16 @@ const CameraPage = () => {
       setSelectedImage(null);
       setShowResults(true);
     }
+  };
+
+  const handleImageSelect = (imageUrl: string) => {
+    // Handle the selected image - could add to chat or process it
+    const newMessages = [...chatMessages, 
+      { type: 'user' as const, content: "I've uploaded an image", editedImage: imageUrl },
+      { type: 'bot' as const, content: "Great! I can see your image. What would you like me to do with it?", images: [] }
+    ];
+    setChatMessages(newMessages);
+    setShowResults(true);
   };
 
   const nextImage = () => {
@@ -306,12 +316,11 @@ const CameraPage = () => {
         <div className="bg-card rounded-2xl border border-border p-4">
           {/* Input with Actions */}
           <div className="relative">
-            <button
-              onClick={() => setShowOptions(!showOptions)}
-              className="absolute left-3 top-1/2 transform -translate-y-1/2 p-1 hover:bg-accent rounded-md"
-            >
-              <Plus className="w-5 h-5 text-muted-foreground" />
-            </button>
+            <UploadModal onImageSelect={handleImageSelect}>
+              <button className="absolute left-3 top-1/2 transform -translate-y-1/2 p-1 hover:bg-accent rounded-md">
+                <Plus className="w-5 h-5 text-muted-foreground" />
+              </button>
+            </UploadModal>
             <Input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
@@ -340,19 +349,6 @@ const CameraPage = () => {
             ))}
           </div>
 
-          {/* Options Menu */}
-          {showOptions && (
-            <div className="mt-3 space-y-2">
-              <button className="flex items-center gap-3 w-full p-3 rounded-lg bg-background hover:bg-accent transition-colors">
-                <Upload className="w-5 h-5 text-primary" />
-                <span className="text-foreground">Attach an Image</span>
-              </button>
-              <button className="flex items-center gap-3 w-full p-3 rounded-lg bg-background hover:bg-accent transition-colors">
-                <Camera className="w-5 h-5 text-primary" />
-                <span className="text-foreground">Take a Photo</span>
-              </button>
-            </div>
-          )}
         </div>
       </div>
 
