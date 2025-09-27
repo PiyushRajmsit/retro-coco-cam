@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { ChevronDown, Clock, Star } from "lucide-react";
+import { ChevronDown, Clock, Star, Share2, Users, MessageCircle } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { Button } from "@/components/ui/button";
 
 const Profile = () => {
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
@@ -78,6 +79,60 @@ const Profile = () => {
         </div>
       </div>
 
+      {/* Earn Credits Bonuses Section */}
+      <div className="px-4 mb-6">
+        <h3 className="text-xl font-bold text-foreground mb-4">Earn More Credits</h3>
+        <div className="space-y-3">
+          <div className="bg-card rounded-xl p-4 border border-border flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-green-500/20 rounded-full flex items-center justify-center">
+                <MessageCircle className="w-5 h-5 text-green-500" />
+              </div>
+              <div>
+                <h4 className="font-semibold text-foreground">Share on WhatsApp</h4>
+                <p className="text-sm text-muted-foreground">Share with friends</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-lg font-bold text-primary">+5</span>
+              <Button size="sm" variant="outline">Share</Button>
+            </div>
+          </div>
+
+          <div className="bg-card rounded-xl p-4 border border-border flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-pink-500/20 rounded-full flex items-center justify-center">
+                <Share2 className="w-5 h-5 text-pink-500" />
+              </div>
+              <div>
+                <h4 className="font-semibold text-foreground">Share on Instagram</h4>
+                <p className="text-sm text-muted-foreground">Post your story</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-lg font-bold text-primary">+3</span>
+              <Button size="sm" variant="outline">Share</Button>
+            </div>
+          </div>
+
+          <div className="bg-card rounded-xl p-4 border border-border flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-blue-500/20 rounded-full flex items-center justify-center">
+                <Users className="w-5 h-5 text-blue-500" />
+              </div>
+              <div>
+                <h4 className="font-semibold text-foreground">Refer Friends</h4>
+                <p className="text-sm text-muted-foreground">Invite new users</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-lg font-bold text-primary">+10</span>
+              <Button size="sm" variant="outline">Invite</Button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Your Images Section */}
       <div className="px-4 mb-20">
         <h3 className="text-xl font-bold text-foreground mb-4">Your Images</h3>
@@ -93,9 +148,9 @@ const Profile = () => {
           </TabsList>
           
           <TabsContent value="uploaded">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-3 gap-3">
               {uploadedImages.map((image, index) => (
-                <div key={index} className="aspect-[3/4] rounded-xl overflow-hidden bg-card border border-border">
+                <div key={index} className="aspect-[3/4] rounded-lg overflow-hidden bg-card border border-border">
                   <img 
                     src={image} 
                     alt={`Uploaded image ${index + 1}`}
@@ -107,9 +162,9 @@ const Profile = () => {
           </TabsContent>
           
           <TabsContent value="generated">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-3 gap-3">
               {generatedImages.map((image, index) => (
-                <div key={index} className="aspect-[3/4] rounded-xl overflow-hidden bg-card border border-border">
+                <div key={index} className="aspect-[3/4] rounded-lg overflow-hidden bg-card border border-border">
                   <img 
                     src={image} 
                     alt={`Generated image ${index + 1}`}
