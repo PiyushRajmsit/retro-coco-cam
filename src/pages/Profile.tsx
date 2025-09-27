@@ -1,4 +1,26 @@
+import { useState } from "react";
+import { ChevronDown, Clock, Star } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+
 const Profile = () => {
+  const [isHistoryOpen, setIsHistoryOpen] = useState(false);
+
+  // Mock data for uploaded images
+  const uploadedImages = [
+    "/src/assets/1950s-style.jpg",
+    "/src/assets/brunch-dressing.jpg",
+    "/src/assets/european-cafe.jpg",
+    "/src/assets/retro-disco.jpg"
+  ];
+
+  const generatedImages = [
+    "/src/assets/summer-cocktail.jpg",
+    "/src/assets/sunset-beach.jpg",
+    "/src/assets/tokyo-street.jpg",
+    "/src/assets/winter-chalet.jpg"
+  ];
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -6,46 +28,98 @@ const Profile = () => {
         <div className="flex items-center gap-3">
           <button 
             onClick={() => window.location.href = '/'}
-            className="p-2 rounded-full bg-secondary"
+            className="p-2 rounded-full bg-secondary hover:bg-secondary/80 transition-colors"
           >
             <svg className="w-5 h-5 text-secondary-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
           </button>
-          <h1 className="text-xl font-bold text-foreground">Profile</h1>
+          <h1 className="text-xl font-bold text-foreground">Vyb</h1>
         </div>
       </div>
 
-      {/* Profile Content */}
-      <div className="px-4">
-        <div className="text-center mb-8">
-          <div className="w-24 h-24 bg-gradient-primary rounded-full mx-auto mb-4 flex items-center justify-center">
-            <svg className="w-12 h-12 text-primary-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-              <circle cx="12" cy="7" r="4" />
-            </svg>
+      {/* Profile Card */}
+      <div className="px-4 mb-6">
+        <div className="bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/30 rounded-2xl p-6 text-center">
+          <h2 className="text-3xl font-bold text-foreground mb-2">John Doe</h2>
+          <p className="text-muted-foreground mb-4">a@b.com</p>
+          
+          {/* Credits Display */}
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <Star className="w-5 h-5 text-primary fill-primary" />
+            <span className="text-2xl font-bold text-primary">7 Credits</span>
+            <Star className="w-5 h-5 text-primary fill-primary" />
           </div>
-          <h2 className="text-2xl font-bold text-foreground mb-2">Piyush</h2>
-          <p className="text-muted-foreground">AI Style Enthusiast</p>
-        </div>
 
-        {/* Profile Options */}
-        <div className="space-y-3">
-          <div className="bg-card rounded-xl p-4 border border-border">
-            <h3 className="font-semibold text-foreground mb-2">Recent Styles</h3>
-            <p className="text-muted-foreground text-sm">View your transformation history</p>
-          </div>
-          
-          <div className="bg-card rounded-xl p-4 border border-border">
-            <h3 className="font-semibold text-foreground mb-2">Saved Looks</h3>
-            <p className="text-muted-foreground text-sm">Your favorite style combinations</p>
-          </div>
-          
-          <div className="bg-card rounded-xl p-4 border border-border">
-            <h3 className="font-semibold text-foreground mb-2">Settings</h3>
-            <p className="text-muted-foreground text-sm">Preferences and account options</p>
-          </div>
+          {/* Credit History Collapsible */}
+          <Collapsible open={isHistoryOpen} onOpenChange={setIsHistoryOpen}>
+            <CollapsibleTrigger className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mx-auto">
+              <Clock className="w-4 h-4" />
+              <span>Credit History</span>
+              <ChevronDown className={`w-4 h-4 transition-transform ${isHistoryOpen ? 'rotate-180' : ''}`} />
+            </CollapsibleTrigger>
+            <CollapsibleContent className="mt-4">
+              <div className="bg-card/50 rounded-xl p-4 space-y-3">
+                <div className="flex items-center gap-3 text-sm">
+                  <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0" />
+                  <span className="text-muted-foreground">Used 2 credits for sending message in chat None</span>
+                </div>
+                <div className="flex items-center gap-3 text-sm">
+                  <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0" />
+                  <span className="text-muted-foreground">Used 2 credits for sending message in chat 859047db2d5d42ad83eb43474e207d87</span>
+                </div>
+                <div className="flex items-center gap-3 text-sm">
+                  <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0" />
+                  <span className="text-muted-foreground">Used 2 credits for sending message in chat 859047db2d5d42ad83eb43474e207d87</span>
+                </div>
+              </div>
+            </CollapsibleContent>
+          </Collapsible>
         </div>
+      </div>
+
+      {/* Your Images Section */}
+      <div className="px-4 mb-20">
+        <h3 className="text-xl font-bold text-foreground mb-4">Your Images</h3>
+        
+        <Tabs defaultValue="uploaded" className="w-full">
+          <TabsList className="grid w-full grid-cols-2 mb-4">
+            <TabsTrigger value="uploaded" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              Uploaded Images
+            </TabsTrigger>
+            <TabsTrigger value="generated" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              Generated Images
+            </TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="uploaded">
+            <div className="grid grid-cols-2 gap-4">
+              {uploadedImages.map((image, index) => (
+                <div key={index} className="aspect-[3/4] rounded-xl overflow-hidden bg-card border border-border">
+                  <img 
+                    src={image} 
+                    alt={`Uploaded image ${index + 1}`}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              ))}
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="generated">
+            <div className="grid grid-cols-2 gap-4">
+              {generatedImages.map((image, index) => (
+                <div key={index} className="aspect-[3/4] rounded-xl overflow-hidden bg-card border border-border">
+                  <img 
+                    src={image} 
+                    alt={`Generated image ${index + 1}`}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              ))}
+            </div>
+          </TabsContent>
+        </Tabs>
       </div>
 
       {/* Bottom Navigation */}
