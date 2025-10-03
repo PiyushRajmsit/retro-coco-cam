@@ -1,11 +1,18 @@
 import { useState } from "react";
-import { ChevronDown, Clock, Star, Share2, Users, MessageCircle } from "lucide-react";
+import { ChevronDown, Clock, Star, Share2, Users, MessageCircle, Phone } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const Profile = () => {
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
+  const [isPhoneModalOpen, setIsPhoneModalOpen] = useState(false);
+  const [countryCode, setCountryCode] = useState("+1");
+  const [phoneNumber, setPhoneNumber] = useState("");
 
   // Mock data for uploaded images
   const uploadedImages = [
@@ -130,6 +137,22 @@ const Profile = () => {
               <Button size="sm" variant="outline">Invite</Button>
             </div>
           </div>
+
+          <div className="bg-card rounded-xl p-4 border border-border flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-purple-500/20 rounded-full flex items-center justify-center">
+                <Phone className="w-5 h-5 text-purple-500" />
+              </div>
+              <div>
+                <h4 className="font-semibold text-foreground">Add a Number</h4>
+                <p className="text-sm text-muted-foreground">Share your phone number</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-lg font-bold text-primary">+2</span>
+              <Button size="sm" variant="outline" onClick={() => setIsPhoneModalOpen(true)}>Add</Button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -213,6 +236,51 @@ const Profile = () => {
           </button>
         </div>
       </div>
+
+      {/* Phone Number Modal */}
+      <Dialog open={isPhoneModalOpen} onOpenChange={setIsPhoneModalOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Share Your Phone Number</DialogTitle>
+            <DialogDescription>
+              Enter your phone number to earn bonus credits
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="country-code">Country Code</Label>
+              <Select value={countryCode} onValueChange={setCountryCode}>
+                <SelectTrigger id="country-code">
+                  <SelectValue placeholder="Select code" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="+1">+1 (US/Canada)</SelectItem>
+                  <SelectItem value="+44">+44 (UK)</SelectItem>
+                  <SelectItem value="+91">+91 (India)</SelectItem>
+                  <SelectItem value="+86">+86 (China)</SelectItem>
+                  <SelectItem value="+81">+81 (Japan)</SelectItem>
+                  <SelectItem value="+49">+49 (Germany)</SelectItem>
+                  <SelectItem value="+33">+33 (France)</SelectItem>
+                  <SelectItem value="+61">+61 (Australia)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="phone-number">Phone Number</Label>
+              <Input
+                id="phone-number"
+                type="tel"
+                placeholder="Enter your phone number"
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
+              />
+            </div>
+            <Button className="w-full" onClick={() => setIsPhoneModalOpen(false)}>
+              Submit & Earn +2 Credits
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
