@@ -695,19 +695,19 @@ const CameraPage = () => {
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
-            <div className="space-y-2">
+            <div className="grid grid-cols-2 gap-2">
               {dislikeReasons.map((reason) => (
                 <button
                   key={reason}
                   onClick={() => handleDislikeReasonToggle(reason)}
-                  className={`w-full text-left px-4 py-3 rounded-lg border transition-colors ${
+                  className={`text-left px-3 py-2.5 rounded-lg border transition-colors ${
                     selectedDislikeReasons.includes(reason)
                       ? 'bg-primary/10 border-primary text-foreground'
                       : 'bg-card border-border hover:bg-accent text-foreground'
                   }`}
                 >
                   <div className="flex items-center gap-2">
-                    <div className={`w-5 h-5 rounded border flex items-center justify-center ${
+                    <div className={`w-4 h-4 rounded border flex-shrink-0 flex items-center justify-center ${
                       selectedDislikeReasons.includes(reason)
                         ? 'bg-primary border-primary'
                         : 'border-border'
@@ -718,7 +718,7 @@ const CameraPage = () => {
                         </svg>
                       )}
                     </div>
-                    <span className="text-sm">{reason}</span>
+                    <span className="text-xs leading-tight">{reason}</span>
                   </div>
                 </button>
               ))}
