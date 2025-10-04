@@ -1,22 +1,26 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Dialog, DialogContent, DialogClose } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogClose, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Plus, Camera, ThumbsUp, ThumbsDown, Upload, Send, Edit, Share, Download, Copy, Twitter, Facebook, Instagram, Mail, Link, MessageCircle } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { UploadModal } from "@/components/UploadModal";
+import { Textarea } from "@/components/ui/textarea";
 
 const CameraPage = () => {
   const [showResults, setShowResults] = useState(false);
   const [selectedImage, setSelectedImage] = useState<number | null>(null);
   const [showShareModal, setShowShareModal] = useState(false);
+  const [showDislikeModal, setShowDislikeModal] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [editingImage, setEditingImage] = useState<string | null>(null);
   const [query, setQuery] = useState("");
   const [chatMessages, setChatMessages] = useState<Array<{type: 'user' | 'bot', content: string, images?: string[], editedImage?: string}>>([]);
   const [isEditMode, setIsEditMode] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string>("Photo Filter");
+  const [selectedDislikeReasons, setSelectedDislikeReasons] = useState<string[]>([]);
+  const [customDislikeFeedback, setCustomDislikeFeedback] = useState("");
 
   // Mock result images
   const resultImages = [
@@ -163,6 +167,39 @@ const CameraPage = () => {
 
   const prevImage = () => {
     setCurrentImageIndex((prev) => (prev - 1 + resultImages.length) % resultImages.length);
+  };
+
+  const dislikeReasons = [
+    "Doesn't look like my face",
+    "Doesn't look like my body",
+    "Don't like the background",
+    "Don't like the outfit",
+    "Don't like the pose",
+    "Don't like the face expression"
+  ];
+
+  const handleDislikeReasonToggle = (reason: string) => {
+    setSelectedDislikeReasons(prev => 
+      prev.includes(reason) 
+        ? prev.filter(r => r !== reason)
+        : [...prev, reason]
+    );
+  };
+
+  const handleDislikeSubmit = () => {
+    const feedback = selectedDislikeReasons.length > 0 
+      ? selectedDislikeReasons.join(", ") 
+      : customDislikeFeedback;
+    
+    if (feedback) {
+      toast({ 
+        title: "Feedback received", 
+        description: "Thank you for helping us improve!" 
+      });
+      setShowDislikeModal(false);
+      setSelectedDislikeReasons([]);
+      setCustomDislikeFeedback("");
+    }
   };
 
   return (
@@ -432,7 +469,10 @@ const CameraPage = () => {
                 <button className="p-3 rounded-full bg-card hover:bg-accent transition-colors">
                   <ThumbsUp className="w-6 h-6 text-foreground" />
                 </button>
-                <button className="p-3 rounded-full bg-card hover:bg-accent transition-colors">
+                <button 
+                  onClick={() => setShowDislikeModal(true)}
+                  className="p-3 rounded-full bg-card hover:bg-accent transition-colors"
+                >
                   <ThumbsDown className="w-6 h-6 text-foreground" />
                 </button>
                 <button 
@@ -619,6 +659,66 @@ const CameraPage = () => {
                 Cancel
               </button>
             </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Dislike Feedback Modal */}
+      <Dialog open={showDislikeModal} onOpenChange={setShowDislikeModal}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Help Us Improve</DialogTitle>
+            <DialogDescription>
+              What didn't you like about this image? Select all that apply or write your own feedback.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              {dislikeReasons.map((reason) => (
+                <button
+                  key={reason}
+                  onClick={() => handleDislikeReasonToggle(reason)}
+                  className={`w-full text-left px-4 py-3 rounded-lg border transition-colors ${
+                    selectedDislikeReasons.includes(reason)
+                      ? 'bg-primary/10 border-primary text-foreground'
+                      : 'bg-card border-border hover:bg-accent text-foreground'
+                  }`}
+                >
+                  <div className="flex items-center gap-2">
+                    <div className={`w-5 h-5 rounded border flex items-center justify-center ${
+                      selectedDislikeReasons.includes(reason)
+                        ? 'bg-primary border-primary'
+                        : 'border-border'
+                    }`}>
+                      {selectedDislikeReasons.includes(reason) && (
+                        <svg className="w-3 h-3 text-primary-foreground" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
+                      )}
+                    </div>
+                    <span className="text-sm">{reason}</span>
+                  </div>
+                </button>
+              ))}
+            </div>
+            
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-foreground">Or write your own feedback</label>
+              <Textarea
+                placeholder="Tell us what you didn't like..."
+                value={customDislikeFeedback}
+                onChange={(e) => setCustomDislikeFeedback(e.target.value)}
+                className="min-h-[80px] resize-none"
+              />
+            </div>
+
+            <Button 
+              className="w-full" 
+              onClick={handleDislikeSubmit}
+              disabled={selectedDislikeReasons.length === 0 && !customDislikeFeedback.trim()}
+            >
+              Submit Feedback
+            </Button>
           </div>
         </DialogContent>
       </Dialog>
