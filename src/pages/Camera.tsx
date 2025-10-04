@@ -687,50 +687,50 @@ const CameraPage = () => {
 
       {/* Dislike Feedback Modal */}
       <Dialog open={showDislikeModal} onOpenChange={setShowDislikeModal}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>Help Us Improve</DialogTitle>
-            <DialogDescription>
+        <DialogContent className="sm:max-w-md max-h-[85vh] overflow-y-auto">
+          <DialogHeader className="space-y-1 pb-2">
+            <DialogTitle className="text-lg sm:text-xl">Help Us Improve</DialogTitle>
+            <DialogDescription className="text-xs sm:text-sm">
               What didn't you like about this image? Select all that apply or write your own feedback.
             </DialogDescription>
           </DialogHeader>
-          <div className="space-y-4 py-4">
-            <div className="space-y-2">
+          <div className="space-y-3 py-2">
+            <div className="grid grid-cols-2 gap-2">
               {dislikeReasons.map((reason) => (
                 <button
                   key={reason}
                   onClick={() => handleDislikeReasonToggle(reason)}
-                  className={`w-full text-left px-4 py-3 rounded-lg border transition-colors ${
+                  className={`text-left px-3 py-2.5 rounded-lg border transition-colors ${
                     selectedDislikeReasons.includes(reason)
                       ? 'bg-primary/10 border-primary text-foreground'
                       : 'bg-card border-border hover:bg-accent text-foreground'
                   }`}
                 >
                   <div className="flex items-center gap-2">
-                    <div className={`w-5 h-5 rounded border flex items-center justify-center ${
+                    <div className={`w-4 h-4 flex-shrink-0 rounded border flex items-center justify-center ${
                       selectedDislikeReasons.includes(reason)
                         ? 'bg-primary border-primary'
                         : 'border-border'
                     }`}>
                       {selectedDislikeReasons.includes(reason) && (
-                        <svg className="w-3 h-3 text-primary-foreground" fill="currentColor" viewBox="0 0 20 20">
+                        <svg className="w-2.5 h-2.5 text-primary-foreground" fill="currentColor" viewBox="0 0 20 20">
                           <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                         </svg>
                       )}
                     </div>
-                    <span className="text-sm">{reason}</span>
+                    <span className="text-xs leading-tight">{reason}</span>
                   </div>
                 </button>
               ))}
             </div>
             
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground">Or write your own feedback</label>
+            <div className="space-y-2 pt-1">
+              <label className="text-xs sm:text-sm font-medium text-foreground">Or write your own feedback</label>
               <Textarea
                 placeholder="Tell us what you didn't like..."
                 value={customDislikeFeedback}
                 onChange={(e) => setCustomDislikeFeedback(e.target.value)}
-                className="min-h-[80px] resize-none"
+                className="min-h-[60px] text-sm resize-none"
               />
             </div>
 
