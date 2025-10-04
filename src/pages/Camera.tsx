@@ -687,47 +687,55 @@ const CameraPage = () => {
 
       {/* Dislike Feedback Modal */}
       <Dialog open={showDislikeModal} onOpenChange={setShowDislikeModal}>
-        <DialogContent className="max-w-[90vw] sm:max-w-2xl p-6 sm:p-8 bg-card/95 backdrop-blur border-border/50">
-          <button
-            onClick={() => setShowDislikeModal(false)}
-            className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none"
-          >
-            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-            <span className="sr-only">Close</span>
-          </button>
-          
-          <div className="space-y-6">
-            <h3 className="text-lg font-medium text-foreground">Tell us more:</h3>
-            
-            <div className="flex flex-wrap gap-2">
+        <DialogContent className="max-w-[85vw] sm:max-w-md p-4 sm:p-6">
+          <DialogHeader className="space-y-2">
+            <DialogTitle className="text-lg sm:text-xl">Help Us Improve</DialogTitle>
+            <DialogDescription className="text-xs sm:text-sm">
+              What didn't you like about this image? Select all that apply or write your own feedback.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-3 py-3">
+            <div className="grid grid-cols-2 gap-2">
               {dislikeReasons.map((reason) => (
                 <button
                   key={reason}
                   onClick={() => handleDislikeReasonToggle(reason)}
-                  className={`px-4 py-2 rounded-full border text-sm transition-all ${
+                  className={`text-left px-2.5 py-2 rounded-lg border transition-colors ${
                     selectedDislikeReasons.includes(reason)
-                      ? 'bg-primary/20 border-primary text-primary font-medium'
-                      : 'bg-background/50 border-border/60 text-muted-foreground hover:border-border hover:bg-background'
+                      ? 'bg-primary/10 border-primary text-foreground'
+                      : 'bg-card border-border hover:bg-accent text-foreground'
                   }`}
                 >
-                  {reason}
+                  <div className="flex items-start gap-1.5">
+                    <div className={`w-3.5 h-3.5 sm:w-4 sm:h-4 rounded border flex-shrink-0 flex items-center justify-center mt-0.5 ${
+                      selectedDislikeReasons.includes(reason)
+                        ? 'bg-primary border-primary'
+                        : 'border-border'
+                    }`}>
+                      {selectedDislikeReasons.includes(reason) && (
+                        <svg className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-primary-foreground" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
+                      )}
+                    </div>
+                    <span className="text-[11px] sm:text-xs leading-snug">{reason}</span>
+                  </div>
                 </button>
               ))}
             </div>
             
             <div className="space-y-2">
+              <label className="text-xs sm:text-sm font-medium text-foreground">Or write your own feedback</label>
               <Textarea
-                placeholder="Or tell us in your own words..."
+                placeholder="Tell us what you didn't like..."
                 value={customDislikeFeedback}
                 onChange={(e) => setCustomDislikeFeedback(e.target.value)}
-                className="min-h-[80px] resize-none text-sm bg-background/50 border-border/60"
+                className="min-h-[70px] sm:min-h-[80px] resize-none text-xs sm:text-sm"
               />
             </div>
 
             <Button 
-              className="w-full" 
+              className="w-full text-sm sm:text-base" 
               onClick={handleDislikeSubmit}
               disabled={selectedDislikeReasons.length === 0 && !customDislikeFeedback.trim()}
             >
