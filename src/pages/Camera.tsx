@@ -21,6 +21,7 @@ const CameraPage = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("Photo Filter");
   const [selectedDislikeReasons, setSelectedDislikeReasons] = useState<string[]>([]);
   const [customDislikeFeedback, setCustomDislikeFeedback] = useState("");
+  const [chatImageDislikeIndex, setChatImageDislikeIndex] = useState<{msgIndex: number, imgIndex: number} | null>(null);
 
   // Mock result images
   const resultImages = [
@@ -199,6 +200,7 @@ const CameraPage = () => {
       setShowDislikeModal(false);
       setSelectedDislikeReasons([]);
       setCustomDislikeFeedback("");
+      setChatImageDislikeIndex(null);
     }
   };
 
@@ -313,17 +315,37 @@ const CameraPage = () => {
                     {message.images && (
                       <div className="grid grid-cols-2 gap-3 mt-4">
                         {message.images.map((image, imgIndex) => (
-                          <button
-                            key={imgIndex}
-                            onClick={() => openImageView(imgIndex)}
-                            className="aspect-square rounded-xl overflow-hidden bg-card border border-border hover:border-primary/50 transition-colors"
-                          >
-                            <img 
-                              src={image} 
-                              alt={`Result ${imgIndex + 1}`}
-                              className="w-full h-full object-cover"
-                            />
-                          </button>
+                          <div key={imgIndex} className="space-y-2">
+                            <button
+                              onClick={() => openImageView(imgIndex)}
+                              className="w-full aspect-square rounded-xl overflow-hidden bg-card border border-border hover:border-primary/50 transition-colors"
+                            >
+                              <img 
+                                src={image} 
+                                alt={`Result ${imgIndex + 1}`}
+                                className="w-full h-full object-cover"
+                              />
+                            </button>
+                            <div className="flex items-center justify-center gap-2">
+                              <button 
+                                onClick={() => {
+                                  toast({ title: "Thanks for the feedback!" });
+                                }}
+                                className="p-2 rounded-lg bg-card/50 hover:bg-accent transition-colors"
+                              >
+                                <ThumbsUp className="w-4 h-4 text-foreground" />
+                              </button>
+                              <button 
+                                onClick={() => {
+                                  setChatImageDislikeIndex({ msgIndex: index, imgIndex });
+                                  setShowDislikeModal(true);
+                                }}
+                                className="p-2 rounded-lg bg-card/50 hover:bg-accent transition-colors"
+                              >
+                                <ThumbsDown className="w-4 h-4 text-foreground" />
+                              </button>
+                            </div>
+                          </div>
                         ))}
                       </div>
                     )}
