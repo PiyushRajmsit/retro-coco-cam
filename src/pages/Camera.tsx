@@ -687,7 +687,7 @@ const CameraPage = () => {
 
       {/* Dislike Feedback Modal */}
       <Dialog open={showDislikeModal} onOpenChange={setShowDislikeModal}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="max-w-[90vw] sm:max-w-md mx-4">
           <DialogHeader>
             <DialogTitle>Help Us Improve</DialogTitle>
             <DialogDescription>
