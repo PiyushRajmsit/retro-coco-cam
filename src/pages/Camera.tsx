@@ -22,6 +22,8 @@ const CameraPage = () => {
   const [selectedDislikeReasons, setSelectedDislikeReasons] = useState<string[]>([]);
   const [customDislikeFeedback, setCustomDislikeFeedback] = useState("");
   const [chatImageDislikeIndex, setChatImageDislikeIndex] = useState<{msgIndex: number, imgIndex: number} | null>(null);
+  const [credits, setCredits] = useState(20);
+  const [creditChange, setCreditChange] = useState<number | null>(null);
 
   // Mock result images
   const resultImages = [
@@ -103,6 +105,14 @@ const CameraPage = () => {
 
   const handleQuery = () => {
     if (query.trim()) {
+      // Random credit change (+2 or -2)
+      const change = Math.random() > 0.5 ? 2 : -2;
+      setCredits(prev => prev + change);
+      setCreditChange(change);
+      
+      // Clear credit change animation after 1 second
+      setTimeout(() => setCreditChange(null), 1000);
+      
       // Add user message
       const newMessages = [...chatMessages, { type: 'user' as const, content: query }];
       
@@ -313,41 +323,51 @@ const CameraPage = () => {
                     )}
                     <p className="text-sm">{message.content}</p>
                     {message.images && (
-                      <div className="grid grid-cols-2 gap-3 mt-4">
-                        {message.images.map((image, imgIndex) => (
-                          <div key={imgIndex} className="space-y-2">
-                            <button
-                              onClick={() => openImageView(imgIndex)}
-                              className="w-full aspect-square rounded-xl overflow-hidden bg-card border border-border hover:border-primary/50 transition-colors"
-                            >
-                              <img 
-                                src={image} 
-                                alt={`Result ${imgIndex + 1}`}
-                                className="w-full h-full object-cover"
-                              />
-                            </button>
-                            <div className="flex items-center justify-center gap-2">
-                              <button 
-                                onClick={() => {
-                                  toast({ title: "Thanks for the feedback!" });
-                                }}
-                                className="p-2 rounded-lg bg-card/50 hover:bg-accent transition-colors"
+                      <>
+                        <div className="grid grid-cols-2 gap-3 mt-4">
+                          {message.images.map((image, imgIndex) => (
+                            <div key={imgIndex} className="space-y-2">
+                              <button
+                                onClick={() => openImageView(imgIndex)}
+                                className="w-full aspect-square rounded-xl overflow-hidden bg-card border border-border hover:border-primary/50 transition-colors"
                               >
-                                <ThumbsUp className="w-4 h-4 text-foreground" />
+                                <img 
+                                  src={image} 
+                                  alt={`Result ${imgIndex + 1}`}
+                                  className="w-full h-full object-cover"
+                                />
                               </button>
-                              <button 
-                                onClick={() => {
-                                  setChatImageDislikeIndex({ msgIndex: index, imgIndex });
-                                  setShowDislikeModal(true);
-                                }}
-                                className="p-2 rounded-lg bg-card/50 hover:bg-accent transition-colors"
-                              >
-                                <ThumbsDown className="w-4 h-4 text-foreground" />
-                              </button>
+                              <div className="flex items-center justify-center gap-2">
+                                <button 
+                                  onClick={() => {
+                                    toast({ title: "Thanks for the feedback!" });
+                                  }}
+                                  className="p-2 rounded-lg bg-card/50 hover:bg-accent transition-colors"
+                                >
+                                  <ThumbsUp className="w-4 h-4 text-foreground" />
+                                </button>
+                                <button 
+                                  onClick={() => {
+                                    setChatImageDislikeIndex({ msgIndex: index, imgIndex });
+                                    setShowDislikeModal(true);
+                                  }}
+                                  className="p-2 rounded-lg bg-card/50 hover:bg-accent transition-colors"
+                                >
+                                  <ThumbsDown className="w-4 h-4 text-foreground" />
+                                </button>
+                              </div>
                             </div>
-                          </div>
-                        ))}
-                      </div>
+                          ))}
+                        </div>
+                        <div className="mt-3 pt-3 border-t border-border/50">
+                          <p className="text-xs text-muted-foreground leading-relaxed">
+                            Each image showcases a unique interpretation of your request.
+                          </p>
+                          <p className="text-xs text-muted-foreground leading-relaxed mt-1">
+                            Tap any image to view it in full screen, edit, or share your favorite!
+                          </p>
+                        </div>
+                      </>
                     )}
                   </div>
                 </div>
@@ -372,6 +392,20 @@ const CameraPage = () => {
 
       {/* Chat Input Area */}
       <div className="fixed bottom-20 left-0 right-0 px-4">
+        {/* Credits Display */}
+        <div className="mb-2 flex justify-center">
+          <div className="bg-card/80 backdrop-blur-sm border border-border rounded-full px-4 py-1.5 flex items-center gap-2">
+            <span className="text-xs font-medium text-foreground">Credits:</span>
+            <span className="text-sm font-bold text-primary">{credits}</span>
+            {creditChange !== null && (
+              <span className={`text-xs font-semibold animate-in slide-in-from-bottom-2 fade-in duration-300 ${
+                creditChange > 0 ? 'text-green-500' : 'text-red-500'
+              }`}>
+                {creditChange > 0 ? '+' : ''}{creditChange}
+              </span>
+            )}
+          </div>
+        </div>
         <div className="bg-card rounded-2xl border border-border p-4">
           {/* Input with Actions */}
           <div className="relative">
