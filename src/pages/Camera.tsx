@@ -110,8 +110,8 @@ const CameraPage = () => {
       setCredits(prev => prev + change);
       setCreditChange(change);
       
-      // Clear credit change animation after 1 second
-      setTimeout(() => setCreditChange(null), 1000);
+      // Clear credit change animation after 3 seconds
+      setTimeout(() => setCreditChange(null), 3000);
       
       // Add user message
       const newMessages = [...chatMessages, { type: 'user' as const, content: query }];
