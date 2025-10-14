@@ -7,6 +7,7 @@ import { Plus, Camera, ThumbsUp, ThumbsDown, Upload, Send, Edit, Share, Download
 import { toast } from "@/hooks/use-toast";
 import { UploadModal } from "@/components/UploadModal";
 import { Textarea } from "@/components/ui/textarea";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 const CameraPage = () => {
   const [showResults, setShowResults] = useState(false);
@@ -24,6 +25,8 @@ const CameraPage = () => {
   const [chatImageDislikeIndex, setChatImageDislikeIndex] = useState<{msgIndex: number, imgIndex: number} | null>(null);
   const [credits, setCredits] = useState(20);
   const [creditChange, setCreditChange] = useState<number | null>(null);
+  const [activeTab, setActiveTab] = useState("current");
+  const [chatHistory, setChatHistory] = useState<Array<{id: string, messages: Array<{type: 'user' | 'bot', content: string, images?: string[], editedImage?: string}>, timestamp: Date}>>([]);
 
   // Mock result images
   const resultImages = [
@@ -217,34 +220,38 @@ const CameraPage = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <div className="flex items-center justify-between p-4 pb-6">
+      <div className="flex items-center justify-between p-4 pb-3">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
-            <span className="text-primary-foreground font-bold text-sm">C</span>
+            <span className="text-primary-foreground font-bold text-sm">V</span>
           </div>
-          <h1 className="text-2xl font-bold text-foreground">Coco AI</h1>
+          <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-500 via-purple-500 to-blue-500 bg-clip-text text-transparent">vyb</h1>
         </div>
         
         <div className="flex items-center gap-3">
-          <button className="p-2 rounded-full bg-secondary">
-            <svg className="w-5 h-5 text-secondary-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-          </button>
-          <button 
-            onClick={() => window.location.href = '/profile'}
-            className="w-8 h-8 bg-gradient-primary rounded-full flex items-center justify-center"
-          >
-            <svg className="w-4 h-4 text-primary-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-              <circle cx="12" cy="7" r="4" />
-            </svg>
+          <button className="p-2 rounded-full hover:bg-secondary/50 transition-colors">
+            <MessageCircle className="w-5 h-5 text-foreground" />
           </button>
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="flex-1 px-4 pb-32">
+      {/* Tabs */}
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+        <div className="px-4 pb-4">
+          <TabsList className="w-full grid grid-cols-2 bg-secondary/50">
+            <TabsTrigger value="current" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              Current Chat
+            </TabsTrigger>
+            <TabsTrigger value="history" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              Chat History
+            </TabsTrigger>
+          </TabsList>
+        </div>
+
+        {/* Current Chat Tab */}
+        <TabsContent value="current" className="mt-0">
+          {/* Main Content */}
+          <div className="flex-1 px-4 pb-32">
         {!showResults ? (
           <>
             {/* Section 1: Dynamic Title */}
@@ -378,6 +385,15 @@ const CameraPage = () => {
             <div className="text-center mt-8">
               <Button 
                 onClick={() => {
+                  // Save current chat to history
+                  if (chatMessages.length > 0) {
+                    const newHistoryItem = {
+                      id: Date.now().toString(),
+                      messages: chatMessages,
+                      timestamp: new Date()
+                    };
+                    setChatHistory(prev => [newHistoryItem, ...prev]);
+                  }
                   setShowResults(false);
                   setChatMessages([]);
                 }}
@@ -388,7 +404,62 @@ const CameraPage = () => {
             </div>
           </>
         )}
-      </div>
+          </div>
+        </TabsContent>
+
+        {/* Chat History Tab */}
+        <TabsContent value="history" className="mt-0">
+          <div className="px-4 pb-32">
+            {chatHistory.length === 0 ? (
+              <div className="text-center py-12">
+                <p className="text-muted-foreground">No chat history yet</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {chatHistory.map((chat) => (
+                  <button
+                    key={chat.id}
+                    onClick={() => {
+                      setChatMessages(chat.messages);
+                      setShowResults(true);
+                      setActiveTab("current");
+                    }}
+                    className="w-full bg-card/50 border border-border rounded-xl p-4 hover:bg-card transition-colors text-left"
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-foreground truncate">
+                          {chat.messages.find(m => m.type === 'user')?.content || 'Untitled chat'}
+                        </p>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          {new Date(chat.timestamp).toLocaleString('en-US', { 
+                            month: 'short', 
+                            day: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                          })}
+                        </p>
+                      </div>
+                      {chat.messages.find(m => m.images && m.images.length > 0) && (
+                        <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0">
+                          <img 
+                            src={chat.messages.find(m => m.images && m.images.length > 0)?.images?.[0]} 
+                            alt="Chat preview"
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      )}
+                    </div>
+                  </button>
+                ))}
+                <p className="text-center text-xs text-muted-foreground py-4">
+                  All {chatHistory.length} conversation{chatHistory.length !== 1 ? 's' : ''} loaded
+                </p>
+              </div>
+            )}
+          </div>
+        </TabsContent>
+      </Tabs>
 
       {/* Chat Input Area */}
       <div className="fixed bottom-20 left-0 right-0 px-4">
