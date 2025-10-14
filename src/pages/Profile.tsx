@@ -4,6 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -13,6 +14,7 @@ const Profile = () => {
   const [isPhoneModalOpen, setIsPhoneModalOpen] = useState(false);
   const [countryCode, setCountryCode] = useState("+1");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [deleteConfirmation, setDeleteConfirmation] = useState<{ type: 'uploaded' | 'generated', index: number } | null>(null);
 
   // Mock data for uploaded images
   const [uploadedImages, setUploadedImages] = useState([
@@ -31,10 +33,22 @@ const Profile = () => {
 
   const handleDeleteUploadedImage = (index: number) => {
     setUploadedImages(prev => prev.filter((_, i) => i !== index));
+    setDeleteConfirmation(null);
   };
 
   const handleDeleteGeneratedImage = (index: number) => {
     setGeneratedImages(prev => prev.filter((_, i) => i !== index));
+    setDeleteConfirmation(null);
+  };
+
+  const confirmDelete = () => {
+    if (deleteConfirmation) {
+      if (deleteConfirmation.type === 'uploaded') {
+        handleDeleteUploadedImage(deleteConfirmation.index);
+      } else {
+        handleDeleteGeneratedImage(deleteConfirmation.index);
+      }
+    }
   };
 
   return (
@@ -188,7 +202,7 @@ const Profile = () => {
                     className="w-full h-full object-cover"
                   />
                   <button
-                    onClick={() => handleDeleteUploadedImage(index)}
+                    onClick={() => setDeleteConfirmation({ type: 'uploaded', index })}
                     className="absolute top-2 right-2 p-2 bg-destructive/90 rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-destructive"
                   >
                     <Trash2 className="w-4 h-4 text-destructive-foreground" />
@@ -208,7 +222,7 @@ const Profile = () => {
                     className="w-full h-full object-cover"
                   />
                   <button
-                    onClick={() => handleDeleteGeneratedImage(index)}
+                    onClick={() => setDeleteConfirmation({ type: 'generated', index })}
                     className="absolute top-2 right-2 p-2 bg-destructive/90 rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-destructive"
                   >
                     <Trash2 className="w-4 h-4 text-destructive-foreground" />
@@ -301,6 +315,22 @@ const Profile = () => {
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={deleteConfirmation !== null} onOpenChange={(open) => !open && setDeleteConfirmation(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Image?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete this image? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>No</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDelete}>Yes</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
