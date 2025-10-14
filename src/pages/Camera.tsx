@@ -26,7 +26,6 @@ const CameraPage = () => {
   const [credits, setCredits] = useState(20);
   const [creditChange, setCreditChange] = useState<number | null>(null);
   const [activeTab, setActiveTab] = useState("current");
-  const [chatHistory, setChatHistory] = useState<Array<{id: string, messages: Array<{type: 'user' | 'bot', content: string, images?: string[], editedImage?: string}>, timestamp: Date}>>([]);
 
   // Mock result images
   const resultImages = [
@@ -35,6 +34,46 @@ const CameraPage = () => {
     "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?height=400&width=400&fit=crop",
     "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?height=400&width=400&fit=crop"
   ];
+  
+  // Initialize with mock chat history
+  const [chatHistory, setChatHistory] = useState<Array<{id: string, messages: Array<{type: 'user' | 'bot', content: string, images?: string[], editedImage?: string}>, timestamp: Date}>>([
+    {
+      id: "1",
+      messages: [
+        { type: 'user', content: 'dsa' },
+        { 
+          type: 'bot', 
+          content: 'Here are some amazing transformations based on "dsa". I\'ve generated these images with the style you requested!',
+          images: resultImages
+        }
+      ],
+      timestamp: new Date(Date.now() - 2000) // 2 seconds ago
+    },
+    {
+      id: "2",
+      messages: [
+        { type: 'user', content: 'lets go' },
+        { 
+          type: 'bot', 
+          content: 'Here are some amazing transformations based on "lets go". I\'ve generated these images with the style you requested!',
+          images: resultImages
+        }
+      ],
+      timestamp: new Date(Date.now() - 180000) // 3 minutes ago
+    },
+    {
+      id: "3",
+      messages: [
+        { type: 'user', content: 'Mountain landscape' },
+        { 
+          type: 'bot', 
+          content: 'Here are some amazing transformations based on "Mountain landscape". I\'ve generated these images with the style you requested!',
+          images: resultImages
+        }
+      ],
+      timestamp: new Date(Date.now() - 240000) // 4 minutes ago
+    }
+  ]);
 
   const followUpPrompts = [
     "Golden Hour Glow",
@@ -416,43 +455,39 @@ const CameraPage = () => {
               </div>
             ) : (
               <div className="space-y-4">
-                {chatHistory.map((chat) => (
-                  <button
-                    key={chat.id}
-                    onClick={() => {
-                      setChatMessages(chat.messages);
-                      setShowResults(true);
-                      setActiveTab("current");
-                    }}
-                    className="w-full bg-card/50 border border-border rounded-xl p-4 hover:bg-card transition-colors text-left"
-                  >
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-foreground truncate">
-                          {chat.messages.find(m => m.type === 'user')?.content || 'Untitled chat'}
-                        </p>
-                        <p className="text-xs text-muted-foreground mt-1">
-                          {new Date(chat.timestamp).toLocaleString('en-US', { 
-                            month: 'short', 
-                            day: 'numeric',
-                            hour: '2-digit',
-                            minute: '2-digit'
-                          })}
+                {chatHistory.map((chat, index) => {
+                  const now = Date.now();
+                  const diff = now - new Date(chat.timestamp).getTime();
+                  const seconds = Math.floor(diff / 1000);
+                  const minutes = Math.floor(seconds / 60);
+                  const hours = Math.floor(minutes / 60);
+                  const days = Math.floor(hours / 24);
+                  
+                  let timeAgo;
+                  if (days > 0) timeAgo = `${days} d`;
+                  else if (hours > 0) timeAgo = `${hours} h`;
+                  else if (minutes > 0) timeAgo = `${minutes} m`;
+                  else timeAgo = `${seconds} s`;
+
+                  return (
+                    <button
+                      key={chat.id}
+                      onClick={() => {
+                        setChatMessages(chat.messages);
+                        setShowResults(true);
+                        setActiveTab("current");
+                      }}
+                      className="w-full bg-gradient-to-r from-purple-500/20 via-pink-500/20 to-purple-500/20 border-2 border-purple-500/30 rounded-2xl p-5 hover:border-purple-500/50 transition-all text-left backdrop-blur-sm"
+                    >
+                      <div className="flex items-center justify-between">
+                        <p className="text-base font-medium text-foreground">
+                          {chat.messages.find(m => m.type === 'user')?.content || 'Untitled chat'} ({timeAgo})
                         </p>
                       </div>
-                      {chat.messages.find(m => m.images && m.images.length > 0) && (
-                        <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0">
-                          <img 
-                            src={chat.messages.find(m => m.images && m.images.length > 0)?.images?.[0]} 
-                            alt="Chat preview"
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                      )}
-                    </div>
-                  </button>
-                ))}
-                <p className="text-center text-xs text-muted-foreground py-4">
+                    </button>
+                  );
+                })}
+                <p className="text-center text-sm text-muted-foreground py-6">
                   All {chatHistory.length} conversation{chatHistory.length !== 1 ? 's' : ''} loaded
                 </p>
               </div>
