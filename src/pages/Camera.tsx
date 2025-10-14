@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogClose, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
-import { Plus, Camera, ThumbsUp, ThumbsDown, Upload, Send, Edit, Share, Download, Copy, Twitter, Facebook, Instagram, Mail, Link, MessageCircle } from "lucide-react";
+import { Plus, Camera, ThumbsUp, ThumbsDown, Upload, Send, Edit, Share, Download, Copy, Twitter, Facebook, Instagram, Mail, Link, MessageCircle, Trash2 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { UploadModal } from "@/components/UploadModal";
 import { Textarea } from "@/components/ui/textarea";
@@ -74,6 +74,11 @@ const CameraPage = () => {
       timestamp: new Date(Date.now() - 240000) // 4 minutes ago
     }
   ]);
+
+  const handleDeleteChat = (chatId: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setChatHistory(prev => prev.filter(chat => chat.id !== chatId));
+  };
 
   const followUpPrompts = [
     "Golden Hour Glow",
@@ -470,21 +475,31 @@ const CameraPage = () => {
                   else timeAgo = `${seconds} s`;
 
                   return (
-                    <button
+                    <div
                       key={chat.id}
-                      onClick={() => {
-                        setChatMessages(chat.messages);
-                        setShowResults(true);
-                        setActiveTab("current");
-                      }}
-                      className="w-full bg-gradient-to-r from-purple-500/20 via-pink-500/20 to-purple-500/20 border-2 border-purple-500/30 rounded-2xl p-5 hover:border-purple-500/50 transition-all text-left backdrop-blur-sm"
+                      className="relative group"
                     >
-                      <div className="flex items-center justify-between">
-                        <p className="text-base font-medium text-foreground">
-                          {chat.messages.find(m => m.type === 'user')?.content || 'Untitled chat'} ({timeAgo})
-                        </p>
-                      </div>
-                    </button>
+                      <button
+                        onClick={() => {
+                          setChatMessages(chat.messages);
+                          setShowResults(true);
+                          setActiveTab("current");
+                        }}
+                        className="w-full bg-gradient-to-r from-purple-500/20 via-pink-500/20 to-purple-500/20 border-2 border-purple-500/30 rounded-2xl p-5 hover:border-purple-500/50 transition-all text-left backdrop-blur-sm"
+                      >
+                        <div className="flex items-center justify-between">
+                          <p className="text-base font-medium text-foreground pr-8">
+                            {chat.messages.find(m => m.type === 'user')?.content || 'Untitled chat'} ({timeAgo})
+                          </p>
+                        </div>
+                      </button>
+                      <button
+                        onClick={(e) => handleDeleteChat(chat.id, e)}
+                        className="absolute top-1/2 -translate-y-1/2 right-4 p-2 bg-destructive/90 rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-destructive"
+                      >
+                        <Trash2 className="w-4 h-4 text-destructive-foreground" />
+                      </button>
+                    </div>
                   );
                 })}
                 <p className="text-center text-sm text-muted-foreground py-6">

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronDown, Clock, Star, Share2, Users, MessageCircle, Phone } from "lucide-react";
+import { ChevronDown, Clock, Star, Share2, Users, MessageCircle, Phone, Trash2 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Button } from "@/components/ui/button";
@@ -15,19 +15,27 @@ const Profile = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
 
   // Mock data for uploaded images
-  const uploadedImages = [
+  const [uploadedImages, setUploadedImages] = useState([
     "/src/assets/1950s-style.jpg",
     "/src/assets/brunch-dressing.jpg",
     "/src/assets/european-cafe.jpg",
     "/src/assets/retro-disco.jpg"
-  ];
+  ]);
 
-  const generatedImages = [
+  const [generatedImages, setGeneratedImages] = useState([
     "/src/assets/summer-cocktail.jpg",
     "/src/assets/sunset-beach.jpg",
     "/src/assets/tokyo-street.jpg",
     "/src/assets/winter-chalet.jpg"
-  ];
+  ]);
+
+  const handleDeleteUploadedImage = (index: number) => {
+    setUploadedImages(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const handleDeleteGeneratedImage = (index: number) => {
+    setGeneratedImages(prev => prev.filter((_, i) => i !== index));
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -173,12 +181,18 @@ const Profile = () => {
           <TabsContent value="uploaded">
             <div className="grid grid-cols-3 gap-3">
               {uploadedImages.map((image, index) => (
-                <div key={index} className="aspect-[3/4] rounded-lg overflow-hidden bg-card border border-border">
+                <div key={index} className="relative aspect-[3/4] rounded-lg overflow-hidden bg-card border border-border group">
                   <img 
                     src={image} 
                     alt={`Uploaded image ${index + 1}`}
                     className="w-full h-full object-cover"
                   />
+                  <button
+                    onClick={() => handleDeleteUploadedImage(index)}
+                    className="absolute top-2 right-2 p-2 bg-destructive/90 rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-destructive"
+                  >
+                    <Trash2 className="w-4 h-4 text-destructive-foreground" />
+                  </button>
                 </div>
               ))}
             </div>
@@ -187,12 +201,18 @@ const Profile = () => {
           <TabsContent value="generated">
             <div className="grid grid-cols-3 gap-3">
               {generatedImages.map((image, index) => (
-                <div key={index} className="aspect-[3/4] rounded-lg overflow-hidden bg-card border border-border">
+                <div key={index} className="relative aspect-[3/4] rounded-lg overflow-hidden bg-card border border-border group">
                   <img 
                     src={image} 
                     alt={`Generated image ${index + 1}`}
                     className="w-full h-full object-cover"
                   />
+                  <button
+                    onClick={() => handleDeleteGeneratedImage(index)}
+                    className="absolute top-2 right-2 p-2 bg-destructive/90 rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-destructive"
+                  >
+                    <Trash2 className="w-4 h-4 text-destructive-foreground" />
+                  </button>
                 </div>
               ))}
             </div>
