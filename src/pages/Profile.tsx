@@ -18,17 +18,21 @@ const Profile = () => {
 
   // Mock data for uploaded images
   const [uploadedImages, setUploadedImages] = useState([
-    "/src/assets/1950s-style.jpg",
-    "/src/assets/brunch-dressing.jpg",
-    "/src/assets/european-cafe.jpg",
-    "/src/assets/retro-disco.jpg"
+    "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400",
+    "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400",
+    "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=400",
+    "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400",
+    "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=400",
+    "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400",
   ]);
 
   const [generatedImages, setGeneratedImages] = useState([
-    "/src/assets/summer-cocktail.jpg",
-    "/src/assets/sunset-beach.jpg",
-    "/src/assets/tokyo-street.jpg",
-    "/src/assets/winter-chalet.jpg"
+    "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400",
+    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400",
+    "https://images.unsplash.com/photo-1517365830460-955ce3ccd263?w=400",
+    "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=400",
+    "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=400",
+    "https://images.unsplash.com/photo-1524250502761-1ac6f2e30d43?w=400",
   ]);
 
   const handleDeleteUploadedImage = (index: number) => {

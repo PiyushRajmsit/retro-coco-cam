@@ -1,142 +1,212 @@
-import { StyleCard } from "@/components/StyleCard";
-import image1950s from "@/assets/1950s-style.jpg";
-import imageBrunch from "@/assets/brunch-dressing.jpg";
-import imageSummer from "@/assets/summer-cocktail.jpg";
-import imageRetro from "@/assets/retro-disco.jpg";
-import imageEuropean from "@/assets/european-cafe.jpg";
-import imageTokyo from "@/assets/tokyo-street.jpg";
-import imageWinter from "@/assets/winter-chalet.jpg";
-import imageSunset from "@/assets/sunset-beach.jpg";
+import { Home, Search, Camera, User, Menu, Lock, Sparkles } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useState } from "react";
+import summerCocktail from "@/assets/summer-cocktail.jpg";
+import tokyoStreet from "@/assets/tokyo-street.jpg";
+import winterChalet from "@/assets/winter-chalet.jpg";
+import retroDisco from "@/assets/retro-disco.jpg";
 
 const Styles = () => {
-  const styles = [
-    { title: "Background Filters", image: imageSunset },
-    { title: "Photo Filters", image: imageRetro },
-    { title: "Fashion Outfits", image: image1950s },
-    { title: "Makeup Trends", image: imageBrunch },
-    { title: "Vibes", image: imageTokyo },
+  const [activeCategory, setActiveCategory] = useState("Cinematic");
+  
+  const categories = [
+    { name: "Cinematic", locked: false },
+    { name: "Makeup", locked: true },
+    { name: "Fashion", locked: true },
   ];
 
+  const posts = [
+    {
+      id: 1,
+      category: "Cinematic",
+      user: { name: "Piyush Raj", initials: "PR", avatar: "" },
+      date: "October 15, 2025",
+      image: tokyoStreet,
+      title: "Cyberpunk Neon Noodle Market Vyb",
+      remixCount: 3,
+      remixThumbs: [winterChalet, retroDisco, summerCocktail],
+    },
+    {
+      id: 2,
+      category: "Cinematic",
+      user: { name: "Sarah Johnson", initials: "SJ", avatar: "" },
+      date: "October 15, 2025",
+      image: summerCocktail,
+      title: "Clean girl aesthetic achieved! 🌟",
+      remixCount: 4,
+      remixThumbs: [winterChalet, retroDisco, summerCocktail, tokyoStreet],
+    },
+    {
+      id: 3,
+      category: "Cinematic",
+      user: { name: "Emma Chen", initials: "EC", avatar: "" },
+      date: "October 15, 2025",
+      image: winterChalet,
+      title: "Winter Wonderland Vibes ❄️",
+      remixCount: 5,
+      remixThumbs: [summerCocktail, tokyoStreet, retroDisco],
+    },
+    {
+      id: 4,
+      category: "Cinematic",
+      user: { name: "Maya Patel", initials: "MP", avatar: "" },
+      date: "October 15, 2025",
+      image: retroDisco,
+      title: "Retro Groove Energy 🎵",
+      remixCount: 2,
+      remixThumbs: [winterChalet, summerCocktail],
+    },
+  ];
+
+  const filteredPosts = posts.filter(post => post.category === activeCategory);
+
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pb-20">
       {/* Header */}
-      <div className="flex items-center justify-between p-6 pb-8 bg-gradient-primary/5 border-b border-border/30">
-        <div className="flex items-center gap-4">
-          <div className="w-10 h-10 bg-gradient-primary rounded-xl flex items-center justify-center shadow-glow">
-            <span className="text-primary-foreground font-bold font-playfair text-lg">C</span>
+      <header className="sticky top-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
+        <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
+          <Button variant="ghost" size="icon">
+            <Menu className="w-6 h-6" />
+          </Button>
+          
+          <div className="text-2xl font-bold bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
+            vyb
           </div>
-          <div className="flex flex-col">
-            <h1 className="text-3xl font-bold font-playfair text-foreground tracking-tight">Coco AI</h1>
-            <p className="text-sm font-poppins text-muted-foreground font-medium">Style & Creative Studio</p>
-          </div>
+          
+          <div className="w-10" />
         </div>
-        
-        <div className="flex items-center gap-3">
-          <button className="p-3 rounded-xl bg-secondary/80 hover:bg-secondary transition-colors shadow-sm">
-            <svg className="w-5 h-5 text-secondary-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-          </button>
-          <button 
-            onClick={() => window.location.href = '/profile'}
-            className="w-10 h-10 bg-gradient-primary rounded-xl flex items-center justify-center shadow-glow hover:scale-105 transition-transform"
-          >
-            <svg className="w-5 h-5 text-primary-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-              <circle cx="12" cy="7" r="4" />
-            </svg>
-          </button>
+      </header>
+
+      {/* Hero Section */}
+      <div className="max-w-5xl mx-auto px-4 py-12 text-center">
+        <h1 className="text-4xl md:text-5xl font-bold mb-4">
+          Vyb - <span className="bg-gradient-to-r from-emerald-400 via-cyan-400 to-primary bg-clip-text text-transparent">A Self Expression Playground</span>
+        </h1>
+        <p className="text-muted-foreground text-lg">
+          Play with your look, story & style.
+        </p>
+      </div>
+
+      {/* Category Tabs */}
+      <div className="max-w-5xl mx-auto px-4 mb-8">
+        <div className="flex gap-3 overflow-x-auto pb-2">
+          {categories.map((category) => (
+            <button
+              key={category.name}
+              onClick={() => !category.locked && setActiveCategory(category.name)}
+              className={`relative px-8 py-3 rounded-lg font-medium whitespace-nowrap transition-all ${
+                activeCategory === category.name
+                  ? "bg-primary text-primary-foreground shadow-glow"
+                  : "bg-card text-card-foreground hover:bg-card/80"
+              } ${category.locked ? "opacity-60 cursor-not-allowed" : ""}`}
+            >
+              <div className="flex items-center gap-2">
+                {category.locked && <Lock className="w-4 h-4" />}
+                {category.name}
+                {category.locked && (
+                  <Badge className="ml-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white border-0">
+                    Coming Soon
+                  </Badge>
+                )}
+              </div>
+            </button>
+          ))}
         </div>
       </div>
 
-      {/* Style Grid */}
-      <div className="px-4 pb-20">
-        {/* Mobile Layout */}
-        <div className="md:hidden space-y-4">
-          {/* Featured card */}
-          <StyleCard
-            title={styles[0].title}
-            image={styles[0].image}
-            className="w-full"
-          />
-          
-          {/* Grid for remaining 4 cards */}
-          <div className="grid grid-cols-2 gap-4">
-            {styles.slice(1).map((style, index) => (
-              <StyleCard
-                key={index + 1}
-                title={style.title}
-                image={style.image}
-              />
-            ))}
-          </div>
-        </div>
+      {/* Posts Feed */}
+      <div className="max-w-5xl mx-auto px-4 space-y-8">
+        {filteredPosts.map((post) => (
+          <div key={post.id} className="bg-card rounded-xl overflow-hidden border border-border">
+            {/* Post Header */}
+            <div className="p-4 flex items-center gap-3">
+              <Avatar className="w-10 h-10 ring-2 ring-primary/20">
+                <AvatarImage src={post.user.avatar} />
+                <AvatarFallback className="bg-primary/10 text-primary font-semibold">
+                  {post.user.initials}
+                </AvatarFallback>
+              </Avatar>
+              <div>
+                <p className="font-semibold text-foreground">{post.user.name}</p>
+                <p className="text-sm text-muted-foreground">{post.date}</p>
+              </div>
+            </div>
 
-        {/* Desktop Layout - Innovative Grid */}
-        <div className="hidden md:grid grid-cols-6 grid-rows-2 gap-4 min-h-[500px]">
-          {/* Hero card - takes up left 3 columns, both rows */}
-          <StyleCard
-            title={styles[0].title}
-            image={styles[0].image}
-            className="col-span-3 row-span-2"
-          />
-          
-          {/* Top right - 2 cards */}
-          <StyleCard
-            title={styles[1].title}
-            image={styles[1].image}
-            className="col-span-3 row-span-1"
-          />
-          
-          {/* Bottom right - 3 smaller cards */}
-          <StyleCard
-            title={styles[2].title}
-            image={styles[2].image}
-            className="col-span-1 row-span-1"
-          />
-          <StyleCard
-            title={styles[3].title}
-            image={styles[3].image}
-            className="col-span-1 row-span-1"
-          />
-          <StyleCard
-            title={styles[4].title}
-            image={styles[4].image}
-            className="col-span-1 row-span-1"
-          />
-        </div>
+            {/* Post Image */}
+            <div className="relative aspect-[16/10] bg-muted">
+              <img 
+                src={post.image} 
+                alt={post.title}
+                className="w-full h-full object-cover"
+              />
+            </div>
+
+            {/* Post Content */}
+            <div className="p-4 space-y-4">
+              <h3 className="text-lg font-semibold text-foreground">{post.title}</h3>
+              
+              {/* Remix Info */}
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Sparkles className="w-4 h-4" />
+                <span>{post.remixCount} remixes done</span>
+              </div>
+
+              {/* Remix Thumbnails */}
+              <div className="flex gap-2 overflow-x-auto pb-2">
+                {post.remixThumbs.map((thumb, idx) => (
+                  <div key={idx} className="relative w-24 h-24 rounded-lg overflow-hidden flex-shrink-0 border border-border">
+                    <img 
+                      src={thumb} 
+                      alt={`Remix ${idx + 1}`}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                ))}
+              </div>
+
+              {/* Remix Button */}
+              <Button 
+                className="w-full bg-gradient-to-r from-primary via-accent to-purple-500 hover:opacity-90 text-white font-semibold"
+                onClick={() => window.location.href = `/camera?category=${encodeURIComponent(post.title)}`}
+              >
+                <Sparkles className="w-4 h-4 mr-2" />
+                Remix
+              </Button>
+            </div>
+          </div>
+        ))}
       </div>
 
       {/* Bottom Navigation */}
-      <div className="fixed bottom-0 left-0 right-0 bg-card/80 backdrop-blur-md border-t border-border">
-        <div className="flex items-center justify-around py-3">
-          <button className="p-3 text-primary bg-primary/20 rounded-full">
-            <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-            </svg>
+      <div className="fixed bottom-0 left-0 right-0 bg-card border-t border-border z-50">
+        <div className="max-w-md mx-auto px-6 py-4 flex justify-around items-center">
+          <button className="flex flex-col items-center gap-1 text-primary">
+            <Home className="w-6 h-6" />
           </button>
+          
           <button 
             onClick={() => window.location.href = '/search'}
-            className="p-3 text-muted-foreground"
+            className="flex flex-col items-center gap-1 text-muted-foreground hover:text-foreground transition-colors"
           >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <circle cx="11" cy="11" r="8"/>
-              <path d="m21 21-4.35-4.35"/>
-            </svg>
+            <Search className="w-6 h-6" />
           </button>
+          
           <button 
             onClick={() => window.location.href = '/camera'}
-            className="p-3 text-muted-foreground"
+            className="flex flex-col items-center gap-1 -mt-8"
           >
-            <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 2L2 7v10c0 5.55 3.84 9.74 9 11 5.16-1.26 9-5.45 9-11V7l-10-5z"/>
-            </svg>
+            <div className="w-16 h-16 rounded-full bg-gradient-primary flex items-center justify-center shadow-glow">
+              <Camera className="w-7 h-7 text-primary-foreground" />
+            </div>
           </button>
-          <button className="p-3 text-muted-foreground">
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-              <circle cx="12" cy="7" r="4"/>
-            </svg>
+          
+          <button 
+            onClick={() => window.location.href = '/profile'}
+            className="flex flex-col items-center gap-1 text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <User className="w-6 h-6" />
           </button>
         </div>
       </div>
