@@ -1,7 +1,8 @@
-import { Home, Search, Camera, User, Menu, Lock, Sparkles } from "lucide-react";
+import { Home, Search, Camera, User, Menu, Lock, Sparkles, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { useState } from "react";
 import summerCocktail from "@/assets/summer-cocktail.jpg";
 import tokyoStreet from "@/assets/tokyo-street.jpg";
@@ -10,6 +11,13 @@ import retroDisco from "@/assets/retro-disco.jpg";
 
 const Styles = () => {
   const [activeCategory, setActiveCategory] = useState("Cinematic");
+  const [previewModal, setPreviewModal] = useState<{
+    open: boolean;
+    image: string;
+    title: string;
+    user: { name: string; initials: string; avatar: string };
+    date: string;
+  } | null>(null);
   
   const categories = [
     { name: "Cinematic", locked: false },
@@ -116,8 +124,8 @@ const Styles = () => {
         </div>
       </div>
 
-      {/* Posts Feed */}
-      <div className="max-w-5xl mx-auto px-4 space-y-8">
+      {/* Posts Feed - 2x2 Grid */}
+      <div className="max-w-5xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-6">
         {filteredPosts.map((post) => (
           <div key={post.id} className="bg-card rounded-xl overflow-hidden border border-border">
             {/* Post Header */}
@@ -156,7 +164,17 @@ const Styles = () => {
               {/* Remix Thumbnails */}
               <div className="flex gap-2 overflow-x-auto pb-2">
                 {post.remixThumbs.map((thumb, idx) => (
-                  <div key={idx} className="relative w-24 h-24 rounded-lg overflow-hidden flex-shrink-0 border border-border">
+                  <div 
+                    key={idx} 
+                    className="relative w-24 h-24 rounded-lg overflow-hidden flex-shrink-0 border border-border cursor-pointer hover:opacity-80 transition-opacity"
+                    onClick={() => setPreviewModal({
+                      open: true,
+                      image: thumb,
+                      title: post.title,
+                      user: post.user,
+                      date: post.date
+                    })}
+                  >
                     <img 
                       src={thumb} 
                       alt={`Remix ${idx + 1}`}
@@ -178,6 +196,61 @@ const Styles = () => {
           </div>
         ))}
       </div>
+
+      {/* Image Preview Modal */}
+      <Dialog open={previewModal?.open || false} onOpenChange={(open) => !open && setPreviewModal(null)}>
+        <DialogContent className="max-w-2xl p-0 bg-card border-border">
+          {previewModal && (
+            <>
+              {/* Close Button */}
+              <button
+                onClick={() => setPreviewModal(null)}
+                className="absolute top-4 right-4 z-10 p-2 rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              {/* User Info Header */}
+              <div className="p-4 flex items-center gap-3 border-b border-border">
+                <Avatar className="w-10 h-10 ring-2 ring-primary/20">
+                  <AvatarImage src={previewModal.user.avatar} />
+                  <AvatarFallback className="bg-primary/10 text-primary font-semibold">
+                    {previewModal.user.initials}
+                  </AvatarFallback>
+                </Avatar>
+                <div>
+                  <p className="font-semibold text-foreground">{previewModal.user.name}</p>
+                  <p className="text-sm text-muted-foreground">{previewModal.date}</p>
+                </div>
+              </div>
+
+              {/* Image */}
+              <div className="relative aspect-[3/4] bg-muted">
+                <img 
+                  src={previewModal.image} 
+                  alt={previewModal.title}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+
+              {/* Title */}
+              <div className="p-4 border-t border-border">
+                <h3 className="text-lg font-semibold text-foreground mb-4">{previewModal.title}</h3>
+                
+                {/* Profile Button */}
+                <Button 
+                  variant="outline" 
+                  className="w-full"
+                  onClick={() => window.location.href = '/profile'}
+                >
+                  <User className="w-4 h-4 mr-2" />
+                  Profile
+                </Button>
+              </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
 
       {/* Bottom Navigation */}
       <div className="fixed bottom-0 left-0 right-0 bg-card border-t border-border z-50">
