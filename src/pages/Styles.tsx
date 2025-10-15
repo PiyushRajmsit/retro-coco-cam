@@ -29,7 +29,7 @@ const Styles = () => {
     {
       id: 1,
       category: "Cinematic",
-      user: { name: "Piyush Raj", initials: "PR", avatar: "" },
+      user: { name: "Piyush Raj", initials: "PR", avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop" },
       date: "October 15, 2025",
       image: tokyoStreet,
       title: "Cyberpunk Neon Noodle Market Vyb",
@@ -39,7 +39,7 @@ const Styles = () => {
     {
       id: 2,
       category: "Cinematic",
-      user: { name: "Sarah Johnson", initials: "SJ", avatar: "" },
+      user: { name: "Sarah Johnson", initials: "SJ", avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop" },
       date: "October 15, 2025",
       image: summerCocktail,
       title: "Clean girl aesthetic achieved! 🌟",
@@ -49,7 +49,7 @@ const Styles = () => {
     {
       id: 3,
       category: "Cinematic",
-      user: { name: "Emma Chen", initials: "EC", avatar: "" },
+      user: { name: "Emma Chen", initials: "EC", avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop" },
       date: "October 15, 2025",
       image: winterChalet,
       title: "Winter Wonderland Vibes ❄️",
@@ -59,7 +59,7 @@ const Styles = () => {
     {
       id: 4,
       category: "Cinematic",
-      user: { name: "Maya Patel", initials: "MP", avatar: "" },
+      user: { name: "Maya Patel", initials: "MP", avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop" },
       date: "October 15, 2025",
       image: retroDisco,
       title: "Retro Groove Energy 🎵",
