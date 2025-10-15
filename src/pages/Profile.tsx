@@ -75,70 +75,48 @@ const Profile = () => {
 
       {/* Profile Card */}
       <div className="px-4 mb-6">
-        <div className="bg-gradient-to-br from-primary/10 via-primary/5 to-background border border-border rounded-3xl overflow-hidden shadow-lg">
-          {/* Header Section with Gradient */}
-          <div className="bg-gradient-to-r from-primary/20 to-primary/10 p-6 text-center border-b border-border/50">
-            <div className="w-20 h-20 bg-primary/20 rounded-full mx-auto mb-3 flex items-center justify-center border-2 border-primary/30">
-              <span className="text-3xl font-bold text-primary">JD</span>
-            </div>
+        <div className="bg-card border border-border rounded-2xl p-6">
+          {/* User Info */}
+          <div className="text-center mb-6">
             <h2 className="text-2xl font-bold text-foreground mb-1">John Doe</h2>
-            <p className="text-sm text-muted-foreground">a@b.com</p>
+            <p className="text-sm text-muted-foreground mb-3">a@b.com</p>
+            <p className="text-sm text-muted-foreground flex items-center justify-center gap-2">
+              <Phone className="w-4 h-4" />
+              +1 (555) 123-4567
+            </p>
           </div>
 
-          {/* Info Grid */}
-          <div className="p-6 space-y-4">
-            {/* Credits Display */}
-            <div className="bg-card/50 backdrop-blur-sm rounded-xl p-4 border border-border/50">
-              <div className="flex items-center justify-center gap-2 mb-1">
-                <Star className="w-5 h-5 text-primary fill-primary" />
-                <span className="text-2xl font-bold text-primary">7 Credits</span>
-                <Star className="w-5 h-5 text-primary fill-primary" />
-              </div>
-              <p className="text-xs text-center text-muted-foreground">Available Credits</p>
-            </div>
-
-            {/* Phone Number Display */}
-            <div className="bg-card/50 backdrop-blur-sm rounded-xl p-4 border border-border/50">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
-                    <Phone className="w-5 h-5 text-primary" />
-                  </div>
-                  <div className="text-left">
-                    <p className="text-xs text-muted-foreground">Phone Number</p>
-                    <p className="text-sm font-semibold text-foreground">+1 (555) 123-4567</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Credit History Collapsible */}
-            <Collapsible open={isHistoryOpen} onOpenChange={setIsHistoryOpen}>
-              <CollapsibleTrigger className="w-full bg-card/50 backdrop-blur-sm rounded-xl p-4 border border-border/50 hover:bg-card/70 transition-colors">
-                <div className="flex items-center justify-center gap-2 text-muted-foreground">
-                  <Clock className="w-4 h-4" />
-                  <span className="text-sm font-medium">Credit History</span>
-                  <ChevronDown className={`w-4 h-4 transition-transform ${isHistoryOpen ? 'rotate-180' : ''}`} />
-                </div>
-              </CollapsibleTrigger>
-              <CollapsibleContent className="mt-3">
-                <div className="bg-card/50 backdrop-blur-sm rounded-xl p-4 border border-border/50 space-y-3">
-                  <div className="flex items-start gap-3 text-sm">
-                    <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0 mt-1.5" />
-                    <span className="text-muted-foreground flex-1">Used 2 credits for sending message in chat None</span>
-                  </div>
-                  <div className="flex items-start gap-3 text-sm">
-                    <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0 mt-1.5" />
-                    <span className="text-muted-foreground flex-1">Used 2 credits for sending message in chat 859047db2d5d42ad83eb43474e207d87</span>
-                  </div>
-                  <div className="flex items-start gap-3 text-sm">
-                    <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0 mt-1.5" />
-                    <span className="text-muted-foreground flex-1">Used 2 credits for sending message in chat 859047db2d5d42ad83eb43474e207d87</span>
-                  </div>
-                </div>
-              </CollapsibleContent>
-            </Collapsible>
+          {/* Credits Display */}
+          <div className="flex items-center justify-center gap-2 mb-4 py-3 bg-primary/5 rounded-xl">
+            <Star className="w-5 h-5 text-primary fill-primary" />
+            <span className="text-2xl font-bold text-primary">7 Credits</span>
+            <Star className="w-5 h-5 text-primary fill-primary" />
           </div>
+
+          {/* Credit History Collapsible */}
+          <Collapsible open={isHistoryOpen} onOpenChange={setIsHistoryOpen}>
+            <CollapsibleTrigger className="flex items-center justify-center gap-2 text-muted-foreground hover:text-foreground transition-colors mx-auto w-full py-2">
+              <Clock className="w-4 h-4" />
+              <span className="text-sm">Credit History</span>
+              <ChevronDown className={`w-4 h-4 transition-transform ${isHistoryOpen ? 'rotate-180' : ''}`} />
+            </CollapsibleTrigger>
+            <CollapsibleContent className="mt-3">
+              <div className="bg-muted/50 rounded-xl p-4 space-y-3">
+                <div className="flex items-start gap-3 text-sm">
+                  <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0 mt-1.5" />
+                  <span className="text-muted-foreground">Used 2 credits for sending message in chat None</span>
+                </div>
+                <div className="flex items-start gap-3 text-sm">
+                  <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0 mt-1.5" />
+                  <span className="text-muted-foreground">Used 2 credits for sending message in chat 859047db2d5d42ad83eb43474e207d87</span>
+                </div>
+                <div className="flex items-start gap-3 text-sm">
+                  <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0 mt-1.5" />
+                  <span className="text-muted-foreground">Used 2 credits for sending message in chat 859047db2d5d42ad83eb43474e207d87</span>
+                </div>
+              </div>
+            </CollapsibleContent>
+          </Collapsible>
         </div>
       </div>
 
