@@ -199,7 +199,7 @@ const Styles = () => {
 
       {/* Image Preview Modal */}
       <Dialog open={previewModal?.open || false} onOpenChange={(open) => !open && setPreviewModal(null)}>
-        <DialogContent className="max-w-2xl p-0 bg-card border-border">
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto p-0 bg-card border-border">
           {previewModal && (
             <>
               {/* Close Button */}
@@ -225,16 +225,16 @@ const Styles = () => {
               </div>
 
               {/* Image */}
-              <div className="relative aspect-[3/4] bg-muted">
+              <div className="relative w-full bg-muted">
                 <img 
                   src={previewModal.image} 
                   alt={previewModal.title}
-                  className="w-full h-full object-cover"
+                  className="w-full h-auto object-contain max-h-[60vh]"
                 />
               </div>
 
-              {/* Title */}
-              <div className="p-4 border-t border-border">
+              {/* Title and Profile Button */}
+              <div className="p-4 border-t border-border bg-card">
                 <h3 className="text-lg font-semibold text-foreground mb-4">{previewModal.title}</h3>
                 
                 {/* Profile Button */}
