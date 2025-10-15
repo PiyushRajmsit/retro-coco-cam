@@ -3,7 +3,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogClose, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
-import { Plus, Camera, ThumbsUp, ThumbsDown, Upload, Send, Edit, Share, Download, Copy, Twitter, Facebook, Instagram, Mail, Link, MessageCircle, Trash2 } from "lucide-react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import { Plus, Camera, ThumbsUp, ThumbsDown, Upload, Send, Edit, Share, Download, Copy, Twitter, Facebook, Instagram, Mail, Link, MessageCircle, Trash2, MoreVertical } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { UploadModal } from "@/components/UploadModal";
 import { Textarea } from "@/components/ui/textarea";
@@ -26,6 +28,7 @@ const CameraPage = () => {
   const [credits, setCredits] = useState(20);
   const [creditChange, setCreditChange] = useState<number | null>(null);
   const [activeTab, setActiveTab] = useState("current");
+  const [deleteConfirmChatId, setDeleteConfirmChatId] = useState<string | null>(null);
 
   // Mock result images
   const resultImages = [
@@ -75,9 +78,10 @@ const CameraPage = () => {
     }
   ]);
 
-  const handleDeleteChat = (chatId: string, e: React.MouseEvent) => {
-    e.stopPropagation();
+  const handleDeleteChat = (chatId: string) => {
     setChatHistory(prev => prev.filter(chat => chat.id !== chatId));
+    setDeleteConfirmChatId(null);
+    toast({ title: "Chat deleted successfully" });
   };
 
   const followUpPrompts = [
@@ -493,12 +497,27 @@ const CameraPage = () => {
                           </p>
                         </div>
                       </button>
-                      <button
-                        onClick={(e) => handleDeleteChat(chat.id, e)}
-                        className="absolute top-1/2 -translate-y-1/2 right-4 p-2 bg-destructive/90 rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-destructive"
-                      >
-                        <Trash2 className="w-4 h-4 text-destructive-foreground" />
-                      </button>
+                      <div className="absolute top-1/2 -translate-y-1/2 right-4" onClick={(e) => e.stopPropagation()}>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <button className="p-2 hover:bg-accent rounded-full transition-colors">
+                              <MoreVertical className="w-5 h-5 text-foreground" />
+                            </button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem 
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setDeleteConfirmChatId(chat.id);
+                              }}
+                              className="text-destructive focus:text-destructive cursor-pointer"
+                            >
+                              <Trash2 className="w-4 h-4 mr-2" />
+                              Delete
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </div>
                     </div>
                   );
                 })}
@@ -899,6 +918,29 @@ const CameraPage = () => {
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={deleteConfirmChatId !== null} onOpenChange={(open) => !open && setDeleteConfirmChatId(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Chat?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete this chat? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setDeleteConfirmChatId(null)}>
+              No
+            </AlertDialogCancel>
+            <AlertDialogAction 
+              onClick={() => deleteConfirmChatId && handleDeleteChat(deleteConfirmChatId)}
+              className="bg-destructive hover:bg-destructive/90"
+            >
+              Yes
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
