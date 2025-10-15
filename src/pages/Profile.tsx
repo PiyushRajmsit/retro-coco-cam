@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { ChevronDown, Clock, Star, Share2, Users, MessageCircle, Phone, Trash2 } from "lucide-react";
+import { ChevronDown, Clock, Star, Share2, Users, MessageCircle, Phone, Trash2, MoreVertical } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -205,12 +206,24 @@ const Profile = () => {
                     alt={`Uploaded image ${index + 1}`}
                     className="w-full h-full object-cover"
                   />
-                  <button
-                    onClick={() => setDeleteConfirmation({ type: 'uploaded', index })}
-                    className="absolute top-2 right-2 p-2 bg-destructive/90 rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-destructive"
-                  >
-                    <Trash2 className="w-4 h-4 text-destructive-foreground" />
-                  </button>
+                  <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <button className="p-2 bg-background/90 rounded-full hover:bg-background transition-colors">
+                          <MoreVertical className="w-4 h-4 text-foreground" />
+                        </button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem 
+                          onClick={() => setDeleteConfirmation({ type: 'uploaded', index })}
+                          className="text-destructive focus:text-destructive cursor-pointer"
+                        >
+                          <Trash2 className="w-4 h-4 mr-2" />
+                          Delete
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
                 </div>
               ))}
             </div>
@@ -225,12 +238,24 @@ const Profile = () => {
                     alt={`Generated image ${index + 1}`}
                     className="w-full h-full object-cover"
                   />
-                  <button
-                    onClick={() => setDeleteConfirmation({ type: 'generated', index })}
-                    className="absolute top-2 right-2 p-2 bg-destructive/90 rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-destructive"
-                  >
-                    <Trash2 className="w-4 h-4 text-destructive-foreground" />
-                  </button>
+                  <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <button className="p-2 bg-background/90 rounded-full hover:bg-background transition-colors">
+                          <MoreVertical className="w-4 h-4 text-foreground" />
+                        </button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem 
+                          onClick={() => setDeleteConfirmation({ type: 'generated', index })}
+                          className="text-destructive focus:text-destructive cursor-pointer"
+                        >
+                          <Trash2 className="w-4 h-4 mr-2" />
+                          Delete
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
                 </div>
               ))}
             </div>
