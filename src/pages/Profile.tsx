@@ -75,33 +75,59 @@ const Profile = () => {
 
       {/* Profile Card */}
       <div className="px-4 mb-6">
-        <div className="bg-card border border-border rounded-2xl p-6">
-          {/* User Info */}
-          <div className="text-center mb-6">
-            <h2 className="text-2xl font-bold text-foreground mb-1">John Doe</h2>
-            <p className="text-sm text-muted-foreground mb-3">a@b.com</p>
-            <p className="text-sm text-muted-foreground flex items-center justify-center gap-2">
-              <Phone className="w-4 h-4" />
-              +1 (555) 123-4567
-            </p>
+        <div className="bg-card border border-border rounded-2xl p-6 shadow-lg">
+          {/* 2-Column Grid Layout */}
+          <div className="grid md:grid-cols-2 gap-6 mb-6">
+            {/* Left Column - User Info */}
+            <div className="space-y-4">
+              <div className="flex items-center gap-4">
+                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center text-primary-foreground text-2xl font-bold shadow-md">
+                  JD
+                </div>
+                <div>
+                  <h2 className="text-xl font-bold text-foreground">John Doe</h2>
+                  <p className="text-sm text-muted-foreground">a@b.com</p>
+                </div>
+              </div>
+              
+              <div className="bg-muted/30 rounded-xl p-4 border border-border/50">
+                <div className="flex items-center gap-3 text-foreground">
+                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                    <Phone className="w-5 h-5 text-primary" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground">Phone Number</p>
+                    <p className="text-sm font-semibold">+1 (555) 123-4567</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column - Credits Display */}
+            <div className="space-y-4">
+              <div className="bg-gradient-to-br from-primary/10 via-primary/5 to-transparent rounded-xl p-6 border border-primary/20">
+                <div className="flex items-center justify-center gap-2 mb-2">
+                  <Star className="w-6 h-6 text-primary fill-primary animate-pulse" />
+                  <span className="text-3xl font-bold text-primary">7</span>
+                  <Star className="w-6 h-6 text-primary fill-primary animate-pulse" />
+                </div>
+                <p className="text-center text-sm text-muted-foreground font-medium">Available Credits</p>
+              </div>
+
+              <Collapsible open={isHistoryOpen} onOpenChange={setIsHistoryOpen}>
+                <CollapsibleTrigger className="flex items-center justify-center gap-2 text-muted-foreground hover:text-foreground transition-colors w-full py-2 rounded-lg hover:bg-muted/50">
+                  <Clock className="w-4 h-4" />
+                  <span className="text-sm font-medium">View History</span>
+                  <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isHistoryOpen ? 'rotate-180' : ''}`} />
+                </CollapsibleTrigger>
+              </Collapsible>
+            </div>
           </div>
 
-          {/* Credits Display */}
-          <div className="flex items-center justify-center gap-2 mb-4 py-3 bg-primary/5 rounded-xl">
-            <Star className="w-5 h-5 text-primary fill-primary" />
-            <span className="text-2xl font-bold text-primary">7 Credits</span>
-            <Star className="w-5 h-5 text-primary fill-primary" />
-          </div>
-
-          {/* Credit History Collapsible */}
+          {/* Credit History - Full Width */}
           <Collapsible open={isHistoryOpen} onOpenChange={setIsHistoryOpen}>
-            <CollapsibleTrigger className="flex items-center justify-center gap-2 text-muted-foreground hover:text-foreground transition-colors mx-auto w-full py-2">
-              <Clock className="w-4 h-4" />
-              <span className="text-sm">Credit History</span>
-              <ChevronDown className={`w-4 h-4 transition-transform ${isHistoryOpen ? 'rotate-180' : ''}`} />
-            </CollapsibleTrigger>
-            <CollapsibleContent className="mt-3">
-              <div className="bg-muted/50 rounded-xl p-4 space-y-3">
+            <CollapsibleContent>
+              <div className="bg-muted/50 rounded-xl p-4 space-y-3 border border-border/50">
                 <div className="flex items-start gap-3 text-sm">
                   <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0 mt-1.5" />
                   <span className="text-muted-foreground">Used 2 credits for sending message in chat None</span>
