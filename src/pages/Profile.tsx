@@ -75,54 +75,61 @@ const Profile = () => {
 
       {/* Profile Card */}
       <div className="px-4 mb-6">
-        <div className="bg-gradient-to-br from-primary/10 via-primary/5 to-background border border-border rounded-3xl overflow-hidden shadow-lg">
-          {/* Header Section with Gradient */}
-          <div className="bg-gradient-to-r from-primary/20 to-primary/10 p-6 text-center border-b border-border/50">
-            <div className="w-20 h-20 bg-primary/20 rounded-full mx-auto mb-3 flex items-center justify-center border-2 border-primary/30">
-              <span className="text-3xl font-bold text-primary">JD</span>
-            </div>
-            <h2 className="text-2xl font-bold text-foreground mb-1">John Doe</h2>
-            <p className="text-sm text-muted-foreground">a@b.com</p>
-          </div>
-
-          {/* Info Grid */}
-          <div className="p-6 space-y-4">
-            {/* Credits Display */}
-            <div className="bg-card/50 backdrop-blur-sm rounded-xl p-4 border border-border/50">
-              <div className="flex items-center justify-center gap-2 mb-1">
-                <Star className="w-5 h-5 text-primary fill-primary" />
-                <span className="text-2xl font-bold text-primary">7 Credits</span>
-                <Star className="w-5 h-5 text-primary fill-primary" />
+        <div className="bg-gradient-to-br from-primary/5 via-background to-primary/5 border border-border rounded-3xl overflow-hidden shadow-xl">
+          {/* User Info Section */}
+          <div className="p-6">
+            <div className="flex items-center gap-4 mb-6">
+              <div className="w-16 h-16 bg-gradient-to-br from-primary to-primary/70 rounded-2xl flex items-center justify-center shadow-lg">
+                <span className="text-2xl font-bold text-primary-foreground">JD</span>
               </div>
-              <p className="text-xs text-center text-muted-foreground">Available Credits</p>
+              <div className="flex-1">
+                <h2 className="text-xl font-bold text-foreground mb-0.5">John Doe</h2>
+                <p className="text-sm text-muted-foreground">a@b.com</p>
+              </div>
             </div>
 
-            {/* Phone Number Display */}
-            <div className="bg-card/50 backdrop-blur-sm rounded-xl p-4 border border-border/50">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+            {/* 2 Column Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              {/* Credits Card */}
+              <div className="bg-gradient-to-br from-primary/20 to-primary/5 rounded-2xl p-5 border border-primary/20 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-20 h-20 bg-primary/10 rounded-full -mr-10 -mt-10" />
+                <div className="relative">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Star className="w-5 h-5 text-primary fill-primary" />
+                    <span className="text-xs font-medium text-primary uppercase tracking-wide">Credits</span>
+                  </div>
+                  <p className="text-3xl font-bold text-foreground">7</p>
+                  <p className="text-xs text-muted-foreground mt-1">Available to use</p>
+                </div>
+              </div>
+
+              {/* Phone Card */}
+              <div className="bg-card/50 backdrop-blur-sm rounded-2xl p-5 border border-border relative overflow-hidden hover:border-primary/30 transition-colors">
+                <div className="absolute top-0 right-0 w-20 h-20 bg-primary/5 rounded-full -mr-10 -mt-10" />
+                <div className="relative">
+                  <div className="flex items-center gap-2 mb-2">
                     <Phone className="w-5 h-5 text-primary" />
+                    <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Phone</span>
                   </div>
-                  <div className="text-left">
-                    <p className="text-xs text-muted-foreground">Phone Number</p>
-                    <p className="text-sm font-semibold text-foreground">+1 (555) 123-4567</p>
-                  </div>
+                  <p className="text-lg font-semibold text-foreground">+1 (555) 123-4567</p>
+                  <p className="text-xs text-muted-foreground mt-1">Verified number</p>
                 </div>
               </div>
             </div>
 
             {/* Credit History Collapsible */}
             <Collapsible open={isHistoryOpen} onOpenChange={setIsHistoryOpen}>
-              <CollapsibleTrigger className="w-full bg-card/50 backdrop-blur-sm rounded-xl p-4 border border-border/50 hover:bg-card/70 transition-colors">
-                <div className="flex items-center justify-center gap-2 text-muted-foreground">
-                  <Clock className="w-4 h-4" />
-                  <span className="text-sm font-medium">Credit History</span>
-                  <ChevronDown className={`w-4 h-4 transition-transform ${isHistoryOpen ? 'rotate-180' : ''}`} />
+              <CollapsibleTrigger className="w-full bg-card/30 rounded-xl p-4 border border-border/50 hover:bg-card/50 hover:border-border transition-all">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Clock className="w-4 h-4 text-muted-foreground" />
+                    <span className="text-sm font-medium text-foreground">Credit History</span>
+                  </div>
+                  <ChevronDown className={`w-4 h-4 text-muted-foreground transition-transform ${isHistoryOpen ? 'rotate-180' : ''}`} />
                 </div>
               </CollapsibleTrigger>
               <CollapsibleContent className="mt-3">
-                <div className="bg-card/50 backdrop-blur-sm rounded-xl p-4 border border-border/50 space-y-3">
+                <div className="bg-card/30 rounded-xl p-4 border border-border/50 space-y-3">
                   <div className="flex items-start gap-3 text-sm">
                     <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0 mt-1.5" />
                     <span className="text-muted-foreground flex-1">Used 2 credits for sending message in chat None</span>
